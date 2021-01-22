@@ -148,6 +148,25 @@ const connectWithSSL = () => {
 
 
 
+#### Event Listener
+- ready (Connections was successfully)
+```javascript
+client.on('ready', () => console.log('Connection successfully'));
+```
+- end (Connection has been closed)
+```javascript
+client.on('end', () => console.log('Connection was closed'));
+```
+- reconnecting (Connection was lost and reconnect was tried)
+```javascript
+client.on('end', (o) => {
+  console.log(`Connection was lost.. try reconnect..
+  Attempt number: ${o.attempt}
+  Time in MS since last attempt: ${o.delay}
+  `);
+});
+```
+
 
 
 
