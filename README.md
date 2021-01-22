@@ -32,7 +32,7 @@ __________________________________________________
 
 
 ## Connect
-```bash
+```javascript
 // ---- Method #1 - Callback ----
 const redis = require('redis');
 
@@ -61,4 +61,64 @@ client.set('hello', 'world', (err, reply) => {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<br><br>
+__________________________________________________
+__________________________________________________
+<br><br>
+
+
+## .set()
+```javascript
+// callback
+client.set('hello', 'world', (err, reply) => {
+  console.log(reply); // OK
+});
+```
+
+
+
+
+
+
+<br><br>
+__________________________________________________
+__________________________________________________
+<br><br>
+
+
+## .get()
+```javascript
+// callback
+client.get('hello', (getErr, getReply) => {
+  console.log(getReply); // world
+});
+```
 
