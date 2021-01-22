@@ -140,6 +140,26 @@ const connectWithSSL = () => {
 
 
 
+#### Connect await
+```javascript
+const runApplication = async () => {
+  // Connect to Redis.
+  const client = redis.createClient({
+    host: 'localhost',
+    port: 6379,
+    // password: 'password',
+  });
+
+  // Clean up and allow the script to exit.
+  client.quit();
+};
+
+try {
+  runApplication();
+} catch (e) {
+  console.log(e);
+}
+```
 
 
 
@@ -199,7 +219,26 @@ __________________________________________________
 // callback
 client.set('hello', 'world', (err, reply) => {
   console.log(reply); // OK
+  client.quit();
 });
+
+
+// promise
+const { promisify } = require('util');
+const setAsync = promisify(client.set).bind(client);
+
+setAsync('hello', 'world')
+  .then(res => console.log(res)) // OK
+  .then(() => client.quit());
+  
+  
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const reply = await client.setAsync('hello', 'world');
+console.log(reply); // OK
+client.quit();
 ```
 
 
@@ -218,6 +257,25 @@ __________________________________________________
 // callback
 client.get('hello', (getErr, getReply) => {
   console.log(getReply); // world
+  client.quit();
 });
+
+
+// promises
+const { promisify } = require('util');
+const getAsync = promisify(client.get).bind(client);
+
+getAsync('hello')
+  .then(res => console.log(res)) // world
+  .then(() => client.quit());
+  
+
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const keyValue = await client.getAsync('hello');
+console.log(keyValue); // world
+client.quit();
 ```
 
