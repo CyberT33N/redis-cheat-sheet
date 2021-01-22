@@ -20,4 +20,4 @@ Redis Cheat Sheet with the most needed stuff..
 ## Docker
 ```bash
 sudo docker run --name my-first-redis -p 6379:6379 redis
-´´´
+```
