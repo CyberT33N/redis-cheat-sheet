@@ -158,8 +158,8 @@ keyPrefix(optional) - collectionName(optional) - keyName:string/list/set/hash
 |Redis Type|Javascript Type|Example|Description|
 |---|---|---|---|
 |string|String|foo|Strings are the most basic kind of Redis value. Redis Strings are binary safe, this means that a Redis string can contain any kind of data, for instance a JPEG image or a serialized Ruby object.|
-|list|Array of String|apple banana orange|Redis Lists are simply lists of strings, sorted by insertion order. It is possible to add elements to a Redis List pushing new elements on the head (on the left) or on the tail (on the right) of the list.|
-|set|Array of String|apple banana orange|Redis Sets are an unordered collection of Strings. It is possible to add, remove, and test for existence of members in O(1) (constant time regardless of the number of elements contained inside the Set).|
+|list|Array of String|apple banana orange|Redis Lists are simply lists of strings, sorted by insertion order. It is possible to add elements to a Redis List pushing new elements on the head (on the left) or on the tail (on the right) of the list. **Compared to sets a list can contain duplicated members**|
+|set|Array of String|apple banana orange|Redis Sets are an unordered collection of Strings. It is possible to add, remove, and test for existence of members in O(1) (constant time regardless of the number of elements contained inside the Set).**Sets are containers for unique members and this means you can not insert duplicated members**|
 |hash|Object(keys have String values)|username hans password test123|Redis Hashes are maps between string fields and string values, so they are the perfect data type to represent objects|
 |float|String|
 |integer|number|
