@@ -447,6 +447,64 @@ module.exports = {
 
 
 
+# Flatten Hash Script (remap)
+```javascript
+/**
+ * Takes a flat key/value pairs object representing a Redis hash, and
+ * returns a new object whose structure matches that of the site domain
+ * object.  Also converts fields whose values are numbers back to
+ * numbers as Redis stores all hash key values as strings.
+ *
+ * @param {Object} siteHash - object containing hash values from Redis
+ * @returns {Object} - object containing the values from Redis remapped
+ *  to the shape of a site domain object.
+ * @private
+ */
+const remap = (siteHash) => {
+  const remappedSiteHash = { ...siteHash };
+
+  remappedSiteHash.id = parseInt(siteHash.id, 10);
+  remappedSiteHash.panels = parseInt(siteHash.panels, 10);
+  remappedSiteHash.capacity = parseFloat(siteHash.capacity, 10);
+
+  // coordinate is optional.
+  if (siteHash.hasOwnProperty('lat') && siteHash.hasOwnProperty('lng')) {
+    remappedSiteHash.coordinate = {
+      lat: parseFloat(siteHash.lat),
+      lng: parseFloat(siteHash.lng),
+    };
+
+    // Remove original fields from resulting object.
+    delete remappedSiteHash.lat;
+    delete remappedSiteHash.lng;
+  }
+
+  return remappedSiteHash;
+};
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
