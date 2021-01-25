@@ -697,6 +697,50 @@ client.quit();
 
 
 
+<br><br>
+
+
+## SCARD (https://redis.io/commands/scard)
+- Returns the set cardinality (number of elements) of the set stored at key.
+- Duplicated data will not be included
+```javascript
+/* testKeyName = ['Mars', 'Pluto', 'Sun', 'Earth', 'Earth'] */
+
+// callback
+client.scard(testKeyName, (e, res) => {
+  console.log(res); // 4
+  client.quit();
+});
+
+
+// promises
+const { promisify } = require('util');
+const scardAsync = promisify(client.scard).bind(client);
+
+scardAsync(testKeyName)
+  .then(res => {
+     console.log(res); // 4
+   })
+  .then(() => client.quit());
+  
+
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const res = await client.scardAsync(testKeyName);
+console.log(res); // 4
+client.quit();
+```
+
+
+
+
+
+
+
+
+
 
 
 
