@@ -1012,6 +1012,112 @@ client.quit();
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## SMOVE (https://redis.io/commands/smove)
+- Move member from the set at source to the set at destination. This operation is atomic. In every given moment the element will appear to be a member of source or destination for other clients. If the source set does not exist or does not contain the specified element, no operation is performed and 0 is returned. Otherwise, the element is removed from the source set and added to the destination set. When the specified element already exists in the destination set, it is only removed from the source set. An error is returned if source or destination does not hold a set value.
+
+Syntax:
+```javascript
+SMOVE setNameA setNameB value
+```
+
+```javascript
+/* If set A look like this:
+planetsRed: Saturn, Neptun, Earth
+
+If set B look like this:
+planetsBlue: Sun, Moon
+
+Then after query we would have:
+planetsRed: Saturn, Neptun
+planetsBlue: Sun, Moon, Earth
+*/
+
+
+const query = ['planetsRed', 'planetsBlue', 'Earth'];
+
+// callback
+client.smove(...query, (e, res) => {
+  console.log(res);
+  client.quit();
+});
+
+
+// promise
+const { promisify } = require('util');
+const smoveAsync = promisify(client.smove).bind(client);
+
+smoveAsync(...query)
+  .then(res => {
+    console.log(res);
+  }) // OK
+  .then(() => client.quit());
+  
+  
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const res = await client.smoveAsync(...query);
+console.log(res);
+client.quit();
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <br><br>
 __________________________________________________
 __________________________________________________
