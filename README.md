@@ -1177,7 +1177,7 @@ testKeyNaME = {
 */
 
 // callback
-client.hgetall(testKeyName, (e, res) => {
+client.hgetall('db:sites:keyname:id', (e, res) => {
   console.log(typeof res); // object
   console.log(typeof res.age); // string
   client.quit();
@@ -1188,7 +1188,7 @@ client.hgetall(testKeyName, (e, res) => {
 const { promisify } = require('util');
 const hgetallAsync = promisify(client.hgetall).bind(client);
 
-hgetallAsync(testKeyName)
+hgetallAsync('db:sites:keyname:id')
   .then(res => {
      console.log(typeof res); // object
      console.log(typeof res.age); // string
@@ -1200,7 +1200,7 @@ hgetallAsync(testKeyName)
 const bluebird = require('bluebird');
 bluebird.promisifyAll(redis);
 
-const res = await client.hgetallAsync(testKeyName);
+const res = await client.hgetallAsync('db:sites:keyname:id');
 console.log(typeof res); // object
 console.log(typeof res.age); // string
 client.quit();
