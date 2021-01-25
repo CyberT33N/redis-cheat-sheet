@@ -490,6 +490,7 @@ __________________________________________________
 
 
 # INCRBYFLOAT (https://redis.io/commands/incrbyfloat)
+- Increment the string representing a floating point number stored at key by the specified increment. By using a negative increment value, the result is that the value stored at the key is decremented (by the obvious properties of addition). If the key does not exist, it is set to 0 before performing the operation.
 ```javascript
 // testKeyValue = 22.5
 
