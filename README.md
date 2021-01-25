@@ -461,8 +461,9 @@ client.quit();
 
 ## SADD (https://redis.io/commands/sadd)
 - Add the specified members to the set stored at key. Specified members that are already a member of this set are ignored. If key does not exist, a new set is created before adding the specified members. An error is returned when the value stored at key is not a set.
+- **Duplicated data will not be included**
 ```javascript
-const planets = ['Mars', 'Pluto', 'Sun', 'Earth'];
+const planets = ['Mars', 'Pluto', 'Sun', 'Earth', 'Earth'];
 
 // callback
 client.sadd('planets', planets, (e, res) => {
@@ -703,9 +704,8 @@ client.quit();
 
 ## SCARD (https://redis.io/commands/scard)
 - Returns the set cardinality (number of elements) of the set stored at key.
-- Duplicated data will not be included
 ```javascript
-/* testKeyName = ['Mars', 'Pluto', 'Sun', 'Earth', 'Earth'] */
+/* testKeyName = ['Mars', 'Pluto', 'Sun', 'Earth'] */
 
 // callback
 client.scard(testKeyName, (e, res) => {
@@ -915,6 +915,38 @@ client.quit();
 
 
 
+
+
+
+## SREM (https://redis.io/commands/srem)
+- Remove the specified members from the set stored at key. Specified members that are not a member of this set are ignored. If key does not exist, it is treated as an empty set and this command returns 0. An error is returned when the value stored at key is not a set.
+```javascript
+/* testKeyName = ['Mars', 'Pluto', 'Sun', 'Earth'] */
+
+// callback
+client.srem(testKeyName, 'Pluto' (e, res) => {
+  console.log(res)  // 3 <-- ['Mars', 'Sun', 'Earth']
+  client.quit();
+});
+
+
+// promises
+const { promisify } = require('util');
+const sremAsync = promisify(client.srem).bind(client);
+
+sremAsync(testKeyName, 'Pluto')
+  .then(res => console.log(res)) // 3 <-- ['Mars', 'Sun', 'Earth']
+  .then(() => client.quit());
+  
+
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const res = await client.sremAsync(testKeyName, 'Pluto');
+console.log(res);  // 3 <-- ['Mars', 'Sun', 'Earth']
+client.quit();
+```
 
 
 
