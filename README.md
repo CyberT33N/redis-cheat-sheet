@@ -145,6 +145,7 @@ __________________________________________________
 ```javascript
 keyPrefix(optional) - collectionName(optional) - keyName:string/list/set/hash
 ```
+
 <br><br>
 
 
@@ -773,14 +774,29 @@ client.quit();
 
 
 ## HSET (https://redis.io/commands/hset)
-- Sets field in the hash stored at key to value. If key does not exist, a new key holding a hash is created. If field already exists in the hash, it is overwritten.
+- Sets field in the hash stored at key to value. If key does not exist, a new key holding a hash is created. If field already exists in the hash, it is overwritten. As of Redis 4.0.0, HSET is variadic and allows for multiple field/value pairs.
 
-As of Redis 4.0.0, HSET is variadic and allows for multiple field/value pairs.
+<br><br>
+
+Syntax:
 ```javascript
-/* ---- EXAMPLE #1 - Sinle Value ----- */
+hashName fieldName fieldValue
+```
+
+```javascript
+/* ----
+EXAMPLE #1 - Single Value - Will produce:
+github: url https://github.com
+----- */
+
+const query = [
+  'github',
+  'url',
+  'https://github.com',
+];
 
 // callback
-client.hset(testKeyNaME, 'testValue', (e, res) => {
+client.hset(...query, (e, res) => {
   console.log(res); // OK
   client.quit();
 });
@@ -790,7 +806,7 @@ client.hset(testKeyNaME, 'testValue', (e, res) => {
 const { promisify } = require('util');
 const hsetAsync = promisify(client.hset).bind(client);
 
-hsetAsync(testKeyNaME, 'testValue')
+hsetAsync(...query)
   .then(res => console.log(res)) // OK
   .then(() => client.quit());
   
@@ -799,7 +815,7 @@ hsetAsync(testKeyNaME, 'testValue')
 const bluebird = require('bluebird');
 bluebird.promisifyAll(redis);
 
-const res = await client.hsetAsync(testKeyNaME, 'testValue');
+const res = await client.hsetAsync(...query);
 console.log(res); // OK
 client.quit();
 
@@ -813,7 +829,10 @@ client.quit();
 
 
 
-/* ---- EXAMPLE #2 - Multiple Values ----- */
+/* ----
+EXAMPLE #2 - Multiple Values - Will produce:
+earth: diameterKM 12756 dayLengthHours 24 meanTempC 15 moonCount 1
+----- */
 const bluebird = require('bluebird');
 bluebird.promisifyAll(redis);
 const earthProps = {
@@ -840,14 +859,28 @@ await Promise.all(
 ## HMSET (https://redis.io/commands/hmset)
 - Sets the specified fields to their respective values in the hash stored at key. This command overwrites any specified fields already existing in the hash. If key does not exist, a new key holding a hash is created.
 - Instead to HSET you can directly insert an Object. This is way more usefully than manually iterate over each object key at HSET.
+
+<br><br>
+
+Syntax:
+```javascript
+HMSET hashName field1 "Hello" field2 "World"
+```
+
+<br><br>
+
 ```javascript
 /* ---- EXAMPLE #1 - non nested object ---- */
+const query = [
+  'github',
+  {
+    url: 'https://github.com',
+    domain: 'com',
+  }
+];
 
 // callback
-client.hmset(testKeyNaME, {
-    name: 'John Doe',
-    age: 42,
-  }, (e, res) => {
+client.hmset(...query, (e, res) => {
   console.log(res); // OK
   client.quit();
 });
@@ -857,10 +890,7 @@ client.hmset(testKeyNaME, {
 const { promisify } = require('util');
 const hmsetAsync = promisify(client.hmset).bind(client);
 
-hmsetAsync(testKeyNaME, {
-    name: 'John Doe',
-    age: 42,
-  })
+hmsetAsync(...query)
   .then(res => console.log(res)) // OK
   .then(() => client.quit());
   
@@ -869,10 +899,7 @@ hmsetAsync(testKeyNaME, {
 const bluebird = require('bluebird');
 bluebird.promisifyAll(redis);
 
-const res = await client.hmsetAsync(testKeyNaME, {
-  name: 'John Doe',
-  age: 42,
-});
+const res = await client.hmsetAsync(...query);
 console.log(res); // OK
 client.quit();
 
@@ -888,7 +915,7 @@ client.quit();
 
 /* ---- EXAMPLE #2 - nested object (Using flatten) - https://youtu.be/PJqvha3iXZQ?t=187 ---- */
 const query = [
-  testKeyNaME,
+  'username',
   flatten({
     name: 'John Doe',
     age: {year: 1993, month: 1},
@@ -930,17 +957,34 @@ client.quit();
 
 
 
+
 <br><br>
 
 
 
 ## RPUSH (https://redis.io/commands/rpush)
 - Insert all the specified values at the tail of the list stored at key. If key does not exist, it is created as empty list before performing the push operation. When key holds a value that is not a list, an error is returned.
+
+
+<br><br>
+
+Syntax:
 ```javascript
-var planets = ['Mars', 'Pluto', 'Sun', 'Earth', 'Earth']
+RPUSH listName value
+```
+
+```javascript
+/*
+Will produce:
+planets: Mars, Pluto, Sun, Earth, Earth
+*/
+
+
+const planets = ['Mars', 'Pluto', 'Sun', 'Earth', 'Earth'];
+const query = ['planets', planets];
 
 // callback
-client.rpush('planets', planets, (e, res) => {
+client.rpush(...query, (e, res) => {
   console.log(res); // 5 <-- Will return the length of the list
   client.quit();
 });
@@ -950,7 +994,7 @@ client.rpush('planets', planets, (e, res) => {
 const { promisify } = require('util');
 const rpushAsync = promisify(client.rpush).bind(client);
 
-rpushAsync('planets', planets)
+rpushAsync(...query)
   .then(res => {
     console.log(res); // 5 <-- Will return the length of the list
   }) // OK
@@ -961,7 +1005,7 @@ rpushAsync('planets', planets)
 const bluebird = require('bluebird');
 bluebird.promisifyAll(redis);
 
-const res = await client.rpushAsync('planets', planets);
+const res = await client.rpushAsync(...query);
 console.log(res); // 5 <-- Will return the length of the list
 client.quit();
 ```
@@ -982,10 +1026,18 @@ client.quit();
 - Add the specified members to the set stored at key. Specified members that are already a member of this set are ignored. If key does not exist, a new set is created before adding the specified members. An error is returned when the value stored at key is not a set.
 - **Duplicated data will not be included**
 ```javascript
-const planets = ['Mars', 'Pluto', 'Sun', 'Earth', 'Earth'];
+/* If set would exist and look like this:
+planets: Saturn, Neptun, Earth
+
+Then after sadd it would look like this:
+planets: Saturn, Neptun, Mars, Sun
+*/
+
+const planets = ['Mars', 'Pluto', 'Sun', 'Earth'];
+const query = ['planets', planets];
 
 // callback
-client.sadd('planets', planets, (e, res) => {
+client.sadd(...query, (e, res) => {
   console.log(res);
   client.quit();
 });
@@ -995,7 +1047,7 @@ client.sadd('planets', planets, (e, res) => {
 const { promisify } = require('util');
 const saddAsync = promisify(client.sadd).bind(client);
 
-saddAsync('planets', planets)
+saddAsync(...query)
   .then(res => {
     console.log(res);
   }) // OK
@@ -1006,7 +1058,7 @@ saddAsync('planets', planets)
 const bluebird = require('bluebird');
 bluebird.promisifyAll(redis);
 
-const res = await client.saddAsync('planets', planets);
+const res = await client.saddAsync(...query);
 console.log(res);
 client.quit();
 ```
@@ -1118,9 +1170,19 @@ client.quit();
 
 ## HGET (https://redis.io/commands/hget)
 ```javascript
+/*
+Our hash look like this:
+github: url https://github.com domain com
+*/
+
+const query = [
+  'github',
+  'url'
+];
+
 // callback
-client.hget(hashName, keyName, (e, res) => {
-  console.log(res);
+client.hget(...query, (e, res) => {
+  console.log(res); // https://github.com
   client.quit();
 });
 
@@ -1129,9 +1191,9 @@ client.hget(hashName, keyName, (e, res) => {
 const { promisify } = require('util');
 const hgetAsync = promisify(client.hget).bind(client);
 
-hgetAsync(hashName, keyName)
+hgetAsync(...query)
   .then(res => {
-     console.log(res);
+     console.log(res); // https://github.com
    })
   .then(() => client.quit());
   
@@ -1140,8 +1202,8 @@ hgetAsync(hashName, keyName)
 const bluebird = require('bluebird');
 bluebird.promisifyAll(redis);
 
-const res = await client.hgetAsync(hashName, keyName);
-console.log(res);
+const res = await client.hgetAsync(...query);
+console.log(res); // https://github.com
 client.quit();
 ```
 
@@ -1153,16 +1215,14 @@ client.quit();
 - Returns all fields and values of the hash stored at key. In the returned value, every field name is followed by its value, so the length of the reply is twice the size of the hash.
 ```javascript
 /*
-testKeyNaME = {
-    name: 'John Doe',
-    age: 42,
-  };
+Our hash look like this:
+github: url https://github.com domain com year 1993
 */
 
 // callback
-client.hgetall('db:sites:keyname:id', (e, res) => {
-  console.log(typeof res); // object
-  console.log(typeof res.age); // string
+client.hgetall(github, (e, res) => {
+  console.log(res); // {url: 'https://github.com', domain: 'com', year: '1993'}
+  console.log(typeof res.year); // string
   client.quit();
 });
 
@@ -1171,10 +1231,10 @@ client.hgetall('db:sites:keyname:id', (e, res) => {
 const { promisify } = require('util');
 const hgetallAsync = promisify(client.hgetall).bind(client);
 
-hgetallAsync('db:sites:keyname:id')
+hgetallAsync(github)
   .then(res => {
-     console.log(typeof res); // object
-     console.log(typeof res.age); // string
+    console.log(res); // {url: 'https://github.com', domain: 'com', year: '1993'}
+    console.log(typeof res.year); // string
    })
   .then(() => client.quit());
   
@@ -1183,9 +1243,9 @@ hgetallAsync('db:sites:keyname:id')
 const bluebird = require('bluebird');
 bluebird.promisifyAll(redis);
 
-const res = await client.hgetallAsync('db:sites:keyname:id');
-console.log(typeof res); // object
-console.log(typeof res.age); // string
+const res = await client.hgetallAsync(github);
+console.log(res); // {url: 'https://github.com', domain: 'com', year: '1993'}
+console.log(typeof res.year); // string
 client.quit();
 ```
 
@@ -1219,11 +1279,12 @@ client.quit();
 - Returns the length of the list stored at key. If key does not exist, it is interpreted as an empty list and 0 is returned. An error is returned when the value stored at key is not a list.
 ```javascript
 /*
-testKeyName = ['Mars', 'Pluto', 'Sun', 'Earth', 'Earth']
+Our list looks like this:
+planets: Earth, Sun, Moon, Neptun, Saturn
 */
 
 // callback
-client.llen(testKeyName, (e, res) => {
+client.llen('planets', (e, res) => {
   console.log(res); // 5 <-- return the length of the list
   client.quit();
 });
@@ -1233,7 +1294,7 @@ client.llen(testKeyName, (e, res) => {
 const { promisify } = require('util');
 const llenAsync = promisify(client.llen).bind(client);
 
-llenAsync(testKeyName)
+llenAsync('planets')
   .then(res => {
      console.log(res); // 5 <-- return the length of the list
    })
@@ -1244,7 +1305,7 @@ llenAsync(testKeyName)
 const bluebird = require('bluebird');
 bluebird.promisifyAll(redis);
 
-const res = await client.llenAsync(testKeyName);
+const res = await client.llenAsync('planets');
 console.log(res); // 5 <-- return the length of the list
 client.quit();
 ```
@@ -1268,11 +1329,15 @@ client.quit();
 - Returns the specified elements of the list stored at key. The offsets start and stop are zero-based indexes, with 0 being the first element of the list (the head of the list), 1 being the next element and so on. These offsets can also be negative numbers indicating offsets starting at the end of the list. For example, -1 is the last element of the list, -2 the penultimate, and so on.
 - **Be carefully with large datasets cause of perfomance**
 ```javascript
-/* testKeyName = ['Mars', 'Pluto', 'Sun', 'Earth', 'Earth'] */
+/*
+Our list looks like this:
+planets: Earth, Sun, Moon, Neptun, Saturn
+*/
+
 
 // callback
 client.lrange(testKeyName, 0, -1, (e, res) => {
-  console.log(res); // ['Mars', 'Pluto', 'Sun', 'Earth', 'Earth']
+  console.log(res); // ['Earth', 'Sun', 'Moon', 'Neptun', 'Saturn']
   client.quit();
 });
 
@@ -1283,7 +1348,7 @@ const lrangeAsync = promisify(client.lrange).bind(client);
 
 lrangeAsync(testKeyName, 0, -1)
   .then(res => {
-     console.log(res); // ['Mars', 'Pluto', 'Sun', 'Earth', 'Earth']
+     console.log(res); // ['Earth', 'Sun', 'Moon', 'Neptun', 'Saturn']
    })
   .then(() => client.quit());
   
@@ -1293,7 +1358,7 @@ const bluebird = require('bluebird');
 bluebird.promisifyAll(redis);
 
 const res = await client.lrangeAsync(testKeyName, 0, -1);
-console.log(res); // ['Mars', 'Pluto', 'Sun', 'Earth', 'Earth']
+console.log(res); // ['Earth', 'Sun', 'Moon', 'Neptun', 'Saturn']
 client.quit();
 ```
 
@@ -1311,10 +1376,14 @@ client.quit();
 ## SCARD (https://redis.io/commands/scard)
 - Returns the set cardinality (number of elements) of the set stored at key.
 ```javascript
-/* testKeyName = ['Mars', 'Pluto', 'Sun', 'Earth'] */
+/*
+Our list looks like this:
+planets: Mars, Pluto, Sun, Earth
+*/
+
 
 // callback
-client.scard(testKeyName, (e, res) => {
+client.scard('planets', (e, res) => {
   console.log(res); // 4
   client.quit();
 });
@@ -1324,7 +1393,7 @@ client.scard(testKeyName, (e, res) => {
 const { promisify } = require('util');
 const scardAsync = promisify(client.scard).bind(client);
 
-scardAsync(testKeyName)
+scardAsync('planets')
   .then(res => {
      console.log(res); // 4
    })
@@ -1335,7 +1404,7 @@ scardAsync(testKeyName)
 const bluebird = require('bluebird');
 bluebird.promisifyAll(redis);
 
-const res = await client.scardAsync(testKeyName);
+const res = await client.scardAsync('planets');
 console.log(res); // 4
 client.quit();
 ```
@@ -1355,9 +1424,23 @@ client.quit();
 ## SMEMBERS (https://redis.io/commands/smembers)
 - Returns all the members of the set value stored at key. This has the same effect as running SINTER with one argument key.
 - **Be carefully with large datasets cause of perfomance. Use SSCAN instead:**
+
+<br><br>
+
+Syntax:
 ```javascript
+SMEMBERS setname
+```
+
+```javascript
+/*
+Our set looks like this:
+planets: Mars, Pluto, Sun, Earth
+*/
+
+
 // callback
-client.smembers('db:sites:ids', (e, res) => {
+client.smembers('planets', (e, res) => {
   console.log(res); // ['Mars', 'Pluto', 'Sun', 'Earth']
   client.quit();
 });
@@ -1367,7 +1450,7 @@ client.smembers('db:sites:ids', (e, res) => {
 const { promisify } = require('util');
 const smembersAsync = promisify(client.smembers).bind(client);
 
-smembersAsync('db:sites:ids')
+smembersAsync('planets')
   .then(res => {
      console.log(res); // ['Mars', 'Pluto', 'Sun', 'Earth']
    })
@@ -1378,7 +1461,7 @@ smembersAsync('db:sites:ids')
 const bluebird = require('bluebird');
 bluebird.promisifyAll(redis);
 
-const res = await client.smembersAsync('db:sites:ids');
+const res = await client.smembersAsync('planets');
 console.log(res); // ['Mars', 'Pluto', 'Sun', 'Earth']
 client.quit();
 ```
@@ -1402,12 +1485,18 @@ client.quit();
 ## SISMEMBER (https://redis.io/commands/sismember)
 - Returns if member is a member of the set stored at key.
 ```javascript
-/* // Set:
-['Sun', 'Earth', 'Pluto']
+/*
+Our set looks like this:
+planets: Sun, Earth, Pluto
 */
 
+const query = [
+  'planets',
+  'Earth',
+];
+
 // callback
-client.sismember(keyName, 'Earth', (e, res) => {
+client.sismember(...query, (e, res) => {
   console.log(res); // true
   client.quit();
 });
@@ -1417,7 +1506,7 @@ client.sismember(keyName, 'Earth', (e, res) => {
 const { promisify } = require('util');
 const sismemberAsync = promisify(client.sismember).bind(client);
 
-sismemberAsync(keyName, 'Earth')
+sismemberAsync(...query)
   .then(res => {
      console.log(res); // true
    })
@@ -1428,7 +1517,7 @@ sismemberAsync(keyName, 'Earth')
 const bluebird = require('bluebird');
 bluebird.promisifyAll(redis);
 
-const res = await client.sismemberAsync(keyName, 'Earth');
+const res = await client.sismemberAsync(...query);
 console.log(res); // true
 client.quit();
 ```
