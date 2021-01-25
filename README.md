@@ -93,81 +93,64 @@ __________________________________________________
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <br><br>
-_________________________________________
-_________________________________________
+__________________________________________________
+__________________________________________________
 <br><br>
 
 # Structure
-
-<br><br>
-
-## Sites (collections like mongodb)
+![Test Image 1](https://imgur.com/BPjQY9v)
+- You can use any structure you want. Most common it is to use : for seperating. However you can also only use your key + data types.
 ```javascript
-db:sites:ids
+keyPrefix(optional) - collectionName(optional) - keyName:string/list/set/hash
 ```
-
-<br><br>
-
-
-## Hashes (documents like mongodb)
-```javascript
-db:sites:keyName:id
-```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<br><br>
-__________________________________________________
-__________________________________________________
 <br><br>
 
 
 # Data Types (https://redis.io/topics/data-types)
 
 <br><br>
-
 
 ## Type Mappings
 
