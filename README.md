@@ -93,6 +93,64 @@ __________________________________________________
 
 
 
+<br><br>
+_________________________________________
+_________________________________________
+<br><br>
+
+# Structure
+
+<br><br>
+
+## Sites (collections like mongodb)
+```javascript
+db:sites:ids
+```
+
+<br><br>
+
+
+## Hashes (documents like mongodb)
+```javascript
+db:sites:keyName:id
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
