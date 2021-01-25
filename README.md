@@ -140,7 +140,7 @@ __________________________________________________
 <br><br>
 
 # Structure
-![Test Image 1](https://imgur.com/BPjQY9v)
+![Test Image 1](https://i.imgur.com/BPjQY9v.png)
 - You can use any structure you want. Most common it is to use : for seperating. However you can also only use your key + data types.
 ```javascript
 keyPrefix(optional) - collectionName(optional) - keyName:string/list/set/hash
