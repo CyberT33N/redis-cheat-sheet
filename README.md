@@ -529,6 +529,7 @@ __________________________________________________
 
 # Read Data
 
+<br><br>
 
 ## GET (https://redis.io/commands/get)
 ```javascript
@@ -738,6 +739,44 @@ client.quit();
 
 
 
+
+
+
+
+<br><br>
+
+
+## SMEMBERS (https://redis.io/commands/smembers)
+- Returns all the members of the set value stored at key. This has the same effect as running SINTER with one argument key.
+```javascript
+/* testKeyName = ['Mars', 'Pluto', 'Sun', 'Earth'] */
+
+// callback
+client.smembers(testKeyName, (e, res) => {
+  console.log(res); // ['Mars', 'Pluto', 'Sun', 'Earth']
+  client.quit();
+});
+
+
+// promises
+const { promisify } = require('util');
+const smembersAsync = promisify(client.smembers).bind(client);
+
+smembersAsync(testKeyName)
+  .then(res => {
+     console.log(res); // ['Mars', 'Pluto', 'Sun', 'Earth']
+   })
+  .then(() => client.quit());
+  
+
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const res = await client.smembersAsync(testKeyName);
+console.log(res); // ['Mars', 'Pluto', 'Sun', 'Earth']
+client.quit();
+```
 
 
 
