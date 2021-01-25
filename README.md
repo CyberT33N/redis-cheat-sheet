@@ -473,6 +473,8 @@ await Promise.all(
 - Sets the specified fields to their respective values in the hash stored at key. This command overwrites any specified fields already existing in the hash. If key does not exist, a new key holding a hash is created.
 - Instead to HSET you can directly insert an Object. This is way more usefully than manually iterate over each object key at HSET.
 ```javascript
+/* ---- EXAMPLE #1 - non nested object ---- */
+
 // callback
 client.hmset(testKeyNaME, {
     name: 'John Doe',
@@ -503,6 +505,49 @@ const res = await client.hmsetAsync(testKeyNaME, {
   name: 'John Doe',
   age: 42,
 });
+console.log(res); // OK
+client.quit();
+
+
+
+
+
+
+
+
+
+
+
+/* ---- EXAMPLE #2 - nested object (Using flatten) - https://youtu.be/PJqvha3iXZQ?t=187 ---- */
+const query = [
+  testKeyNaME,
+  flatten({
+    name: 'John Doe',
+    age: {year: 1993, month: 1},
+  })
+];
+
+// callback
+client.hmset(...query, (e, res) => {
+  console.log(res); // OK
+  client.quit();
+});
+
+
+// promise
+const { promisify } = require('util');
+const hmsetAsync = promisify(client.hmset).bind(client);
+
+hmsetAsync(...query)
+  .then(res => console.log(res)) // OK
+  .then(() => client.quit());
+  
+  
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const res = await client.hmsetAsync(...query);
 console.log(res); // OK
 client.quit();
 ```
