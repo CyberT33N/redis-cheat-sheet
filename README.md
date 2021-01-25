@@ -566,6 +566,48 @@ client.quit();
 
 
 
+<br><br>
+
+
+## LLEN (https://redis.io/commands/llen)
+- Returns the length of the list stored at key. If key does not exist, it is interpreted as an empty list and 0 is returned. An error is returned when the value stored at key is not a list.
+```javascript
+/*
+testKeyName = ['Mars', 'Pluto', 'Sun', 'Earth', 'Earth']
+*/
+
+// callback
+client.llen(testKeyName, (e, res) => {
+  console.log(res); // 5 <-- return the length of the list
+  client.quit();
+});
+
+
+// promises
+const { promisify } = require('util');
+const llenAsync = promisify(client.llen).bind(client);
+
+llenAsync(testKeyName)
+  .then(res => {
+     console.log(res); // 5 <-- return the length of the list
+   })
+  .then(() => client.quit());
+  
+
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const res = await client.llenAsync(testKeyName);
+console.log(res); // 5 <-- return the length of the list
+client.quit();
+```
+
+
+
+
+
+
 
 
 
