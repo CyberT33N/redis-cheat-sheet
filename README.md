@@ -925,7 +925,7 @@ client.quit();
 
 // callback
 client.srem(testKeyName, 'Pluto' (e, res) => {
-  console.log(res)  // 3 <-- ['Mars', 'Sun', 'Earth']
+  console.log(res)  // 1 <-- shows how many data got removed
   client.quit();
 });
 
@@ -935,7 +935,7 @@ const { promisify } = require('util');
 const sremAsync = promisify(client.srem).bind(client);
 
 sremAsync(testKeyName, 'Pluto')
-  .then(res => console.log(res)) // 3 <-- ['Mars', 'Sun', 'Earth']
+  .then(res => console.log(res)) // 1 <-- shows how many data got removed
   .then(() => client.quit());
   
 
@@ -944,7 +944,7 @@ const bluebird = require('bluebird');
 bluebird.promisifyAll(redis);
 
 const res = await client.sremAsync(testKeyName, 'Pluto');
-console.log(res);  // 3 <-- ['Mars', 'Sun', 'Earth']
+console.log(res);  // 1 <-- shows how many data got removed
 client.quit();
 ```
 
