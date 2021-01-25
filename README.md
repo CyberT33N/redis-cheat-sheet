@@ -327,7 +327,7 @@ __________________________________________________
 <br><br>
 
 
-# .set()
+# set (https://redis.io/commands/set)
 ```javascript
 // callback
 client.set('hello', 'world', (err, reply) => {
@@ -402,7 +402,7 @@ __________________________________________________
 <br><br>
 
 
-# .get()
+# GET (https://redis.io/commands/get)
 ```javascript
 // callback
 client.get('hello', (getErr, getReply) => {
@@ -426,6 +426,96 @@ bluebird.promisifyAll(redis);
 
 const keyValue = await client.getAsync('hello');
 console.log(keyValue); // world
+client.quit();
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<br><br>
+__________________________________________________
+__________________________________________________
+<br><br>
+
+
+# INCRBYFLOAT (https://redis.io/commands/incrbyfloat)
+```javascript
+// testKeyValue = 22.5
+
+// callback
+client.incrbyfloat(testKeyValue, 1, (e, res) => {
+   console.log(typeof res); // string
+   console.log(res); // 23.5
+   client.quit();
+});
+
+
+// promises
+const getIncrbyfloat = promisify(client.incrbyfloat).bind(client);
+
+getIncrbyfloat(testKeyValue, 1)
+  .then(res => {
+    console.log(typeof res); // string
+    console.log(res); // 23.5
+   })
+  .then(() => client.quit());
+  
+
+// await
+const res = await client.incrbyfloatAsync(testKeyValue, 1);
+console.log(typeof res); // string
+console.log(res); // 23.5
 client.quit();
 ```
 
