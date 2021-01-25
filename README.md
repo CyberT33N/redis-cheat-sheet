@@ -716,6 +716,65 @@ client.quit();
 
 
 
+<br><br>
+
+
+## SDIFFSTORE (https://redis.io/commands/sdiffstore)
+- This command is equal to SDIFF (https://redis.io/commands/sdiff), but instead of returning the resulting set, it is stored in destination. If destination already exists, it is overwritten.
+
+<br><br>
+
+Syntax:
+```javascript
+SDIFFSTORE keyName setName1 setName2
+```
+
+```javascript
+/*
+Our set A like this:
+planetsRed: Sun, Earth, Pluto, Moon
+
+Our set B like this:
+planetsBlue: Sun, Earth, Pluto, Neptun
+
+It will create a set of the difference at set difference and look like this:
+difference: Moon, Neptun
+*/
+
+const query = [
+  'difference',
+  'planetsRed',
+  'planetsBlue',
+];
+
+// callback
+client.sdiff(...query, (e, res) => {
+  console.log(res); // 2 - the number of elements in the resulting set.
+  client.quit();
+});
+
+
+// promises
+const { promisify } = require('util');
+const sdiffAsync = promisify(client.sdiff).bind(client);
+
+sdiffAsync(...query)
+  .then(res => {
+     console.log(res); // 2 - the number of elements in the resulting set.
+   })
+  .then(() => client.quit());
+  
+
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const res = await client.sdiffAsync(...query);
+console.log(res); // 2 - the number of elements in the resulting set.
+client.quit();
+```
+
+
 
 
 
