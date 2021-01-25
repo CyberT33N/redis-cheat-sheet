@@ -472,8 +472,8 @@ getAsync('hello')
 const bluebird = require('bluebird');
 bluebird.promisifyAll(redis);
 
-const keyValue = await client.getAsync('hello');
-console.log(keyValue); // world
+const res = await client.getAsync('hello');
+console.log(res); // world
 client.quit();
 ```
 
@@ -493,6 +493,7 @@ testKeyNaME = {
 // callback
 client.hgetall(testKeyName, (e, res) => {
   console.log(typeof res); // object
+  console.log(typeof res.age); // string
   client.quit();
 });
 
@@ -504,6 +505,7 @@ const hgetallAsync = promisify(client.hgetall).bind(client);
 hgetallAsync(testKeyName)
   .then(res => {
      console.log(typeof res); // object
+     console.log(typeof res.age); // string
    })
   .then(() => client.quit());
   
@@ -512,8 +514,9 @@ hgetallAsync(testKeyName)
 const bluebird = require('bluebird');
 bluebird.promisifyAll(redis);
 
-const keyValue = await client.hgetallAsync(testKeyName);
+const res = await client.hgetallAsync(testKeyName);
 console.log(typeof res); // object
+console.log(typeof res.age); // string
 client.quit();
 ```
 
