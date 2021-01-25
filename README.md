@@ -1558,6 +1558,68 @@ client.quit();
 
 
 
+<br><br>
+
+
+## SDIFF (https://redis.io/commands/sdiff)
+- Returns the members of the set resulting from the difference between the first set and all the successive sets.
+
+<br><br>
+
+Syntax:
+```javascript
+key1 = {a,b,c,d}
+key2 = {c}
+key3 = {a,c,e}
+SDIFF key1 key2 key3 = {b,d}
+```
+
+```javascript
+/*
+Our set A like this:
+planetsRed: Sun, Earth, Pluto, Moon
+
+Our set B like this:
+planetsBlue: Sun, Earth, Pluto, Neptun
+*/
+
+const query = [
+  'planetsRed',
+  'planetsBlue',
+];
+
+// callback
+client.sdiff(...query, (e, res) => {
+  console.log(res); // ['Moon', 'Neptun']
+  client.quit();
+});
+
+
+// promises
+const { promisify } = require('util');
+const sdiffAsync = promisify(client.sdiff).bind(client);
+
+sdiffAsync(...query)
+  .then(res => {
+     console.log(res); // ['Moon', 'Neptun']
+   })
+  .then(() => client.quit());
+  
+
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const res = await client.sdiffAsync(...query);
+console.log(res); // ['Moon', 'Neptun']
+client.quit();
+```
+
+
+
+
+
+
 
 
 
