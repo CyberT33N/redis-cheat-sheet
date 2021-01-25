@@ -763,7 +763,7 @@ client.quit();
 
 // callback
 client.rpop(testKeyName, (e, res) => {
-  console.log(res)  // ['Mars', 'Pluto', 'Sun']
+  console.log(res)  // Earth <-- ['Mars', 'Pluto', 'Sun']
   client.quit();
 });
 
@@ -773,7 +773,7 @@ const { promisify } = require('util');
 const rpopAsync = promisify(client.rpop).bind(client);
 
 rpopAsync(testKeyName)
-  .then(res => console.log(res)) // ['Mars', 'Pluto', 'Sun']
+  .then(res => console.log(res)) // Earth <-- ['Mars', 'Pluto', 'Sun']
   .then(() => client.quit());
   
 
@@ -782,7 +782,7 @@ const bluebird = require('bluebird');
 bluebird.promisifyAll(redis);
 
 const res = await client.rpopAsync(testKeyName);
-console.log(res);  // ['Mars', 'Pluto', 'Sun']
+console.log(res);  // Earth <-- ['Mars', 'Pluto', 'Sun']
 client.quit();
 ```
 
