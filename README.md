@@ -1413,6 +1413,90 @@ client.quit();
 
 
 
+<br><br>
+
+
+## SISMEMBER (https://redis.io/commands/sismember)
+- Returns if member is a member of the set stored at key.
+```javascript
+/* // Set:
+['Sun', 'Earth', 'Pluto']
+*/
+
+// callback
+client.sismember(keyName, 'Earth', (e, res) => {
+  console.log(res); // true
+  client.quit();
+});
+
+
+// promises
+const { promisify } = require('util');
+const sismemberAsync = promisify(client.sismember).bind(client);
+
+sismemberAsync(keyName, 'Earth')
+  .then(res => {
+     console.log(res); // true
+   })
+  .then(() => client.quit());
+  
+
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const res = await client.sismemberAsync(keyName, 'Earth');
+console.log(res); // true
+client.quit();
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
