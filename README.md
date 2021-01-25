@@ -392,11 +392,11 @@ hmsetAsync(testKeyNaME, {
 const bluebird = require('bluebird');
 bluebird.promisifyAll(redis);
 
-const reply = await client.hmsetAsync(testKeyNaME, {
+const res = await client.hmsetAsync(testKeyNaME, {
   name: 'John Doe',
   age: 42,
 });
-console.log(reply); // OK
+console.log(res); // OK
 client.quit();
 ```
 
@@ -404,6 +404,47 @@ client.quit();
 
 
 
+
+
+
+
+
+
+<br><br>
+
+
+
+## RPUSH (https://redis.io/commands/rpush)
+- Insert all the specified values at the tail of the list stored at key. If key does not exist, it is created as empty list before performing the push operation. When key holds a value that is not a list, an error is returned.
+```javascript
+var planets = ['Mars', 'Pluto', 'Sun', 'Earth', 'Earth']
+
+// callback
+client.rpush('planets', planets, (e, res) => {
+  console.log(res); // 5 <-- Will return the length of the list
+  client.quit();
+});
+
+
+// promise
+const { promisify } = require('util');
+const rpushAsync = promisify(client.rpush).bind(client);
+
+rpushAsync('planets', planets)
+  .then(res => {
+    console.log(res); // 5 <-- Will return the length of the list
+  }) // OK
+  .then(() => client.quit());
+  
+  
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const res = await client.rpushAsync('planets', planets);
+console.log(res); // 5 <-- Will return the length of the list
+client.quit();
+```
 
 
 
