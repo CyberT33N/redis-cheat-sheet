@@ -171,7 +171,7 @@ __________________________________________________
 
 ## Type Mappings
 
-|Redis Type|Javascript Type|
+|Redis Type|Javascript Type|Description|
 |---|---|---|
 |string|String|Strings are the most basic kind of Redis value. Redis Strings are binary safe, this means that a Redis string can contain any kind of data, for instance a JPEG image or a serialized Ruby object.|
 |list|Array of String|Redis Lists are simply lists of strings, sorted by insertion order. It is possible to add elements to a Redis List pushing new elements on the head (on the left) or on the tail (on the right) of the list.|
