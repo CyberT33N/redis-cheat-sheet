@@ -666,6 +666,73 @@ client.quit();
 ```
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<br><br>
+
+
+## HGET (https://redis.io/commands/hget)
+```javascript
+// callback
+client.hget(hashName, keyName, (e, res) => {
+  console.log(res);
+  client.quit();
+});
+
+
+// promises
+const { promisify } = require('util');
+const hgetAsync = promisify(client.hget).bind(client);
+
+hgetAsync(hashName, keyName)
+  .then(res => {
+     console.log(res);
+   })
+  .then(() => client.quit());
+  
+
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const res = await client.hgetAsync(hashName, keyName);
+console.log(res);
+client.quit();
+```
+
+
 <br><br>
 
 
@@ -707,6 +774,24 @@ console.log(typeof res); // object
 console.log(typeof res.age); // string
 client.quit();
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
