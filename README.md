@@ -7,15 +7,35 @@ Redis Cheat Sheet with the most needed stuff..
 # Guides
 - https://university.redislabs.com/courses/course-v1:redislabs+RU102JS+2021_01/course/
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <br><br>
-
-
+_________________________________________
+_________________________________________
+<br><br>
 
 # Installation
 
-
 <br><br>
-
 
 ## Docker
 ```bash
@@ -49,7 +69,7 @@ __________________________________________________
 <br><br>
 
 
-#### Node.js
+## Node.js
 - ioredis (https://github.com/luin/ioredis)
 - node_redis (https://github.com/NodeRedis/node-redis)
 
@@ -60,6 +80,25 @@ __________________________________________________
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <br><br>
 __________________________________________________
 __________________________________________________
@@ -68,7 +107,49 @@ __________________________________________________
 
 
 
-## Connect
+# Type Mappings
+
+|Redis Type|Javascript Type|
+|---|---|
+|string|String|
+|list|Array of String|
+|set|Array of String|
+|hash|Object(keys have String values)|
+|float|String|
+|integer|number|
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<br><br>
+__________________________________________________
+__________________________________________________
+<br><br>
+
+
+
+
+# Connect
 ```javascript
 const redis = require('redis');
 
@@ -140,7 +221,7 @@ const connectWithSSL = () => {
 
 
 
-#### Connect await
+## Connect await
 ```javascript
 const runApplication = async () => {
   // Connect to Redis.
@@ -168,7 +249,7 @@ try {
 
 
 
-#### Event Listener
+## Event Listener
 - ready (Connections was successfully)
 ```javascript
 client.on('ready', () => console.log('Connection successfully'));
@@ -208,13 +289,45 @@ client.on('end', (o) => {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <br><br>
 __________________________________________________
 __________________________________________________
 <br><br>
 
 
-## .set()
+# .set()
 ```javascript
 // callback
 client.set('hello', 'world', (err, reply) => {
@@ -246,13 +359,50 @@ client.quit();
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <br><br>
 __________________________________________________
 __________________________________________________
 <br><br>
 
 
-## .get()
+# .get()
 ```javascript
 // callback
 client.get('hello', (getErr, getReply) => {
