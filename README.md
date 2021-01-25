@@ -326,12 +326,15 @@ __________________________________________________
 __________________________________________________
 <br><br>
 
+# Write Data
 
-# set (https://redis.io/commands/set)
+<br><br>
+
+## SET (https://redis.io/commands/set)
 ```javascript
 // callback
-client.set('hello', 'world', (err, reply) => {
-  console.log(reply); // OK
+client.set('hello', 'world', (e, res) => {
+  console.log(res); // OK
   client.quit();
 });
 
@@ -350,6 +353,49 @@ const bluebird = require('bluebird');
 bluebird.promisifyAll(redis);
 
 const reply = await client.setAsync('hello', 'world');
+console.log(reply); // OK
+client.quit();
+```
+
+
+
+<br><br>
+
+
+
+## HMSET (https://redis.io/commands/hmset)
+- Sets the specified fields to their respective values in the hash stored at key. This command overwrites any specified fields already existing in the hash. If key does not exist, a new key holding a hash is created.
+```javascript
+// callback
+client.hmset(testKeyNaME, {
+    name: 'John Doe',
+    age: 42,
+  }, (e, res) => {
+  console.log(res); // OK
+  client.quit();
+});
+
+
+// promise
+const { promisify } = require('util');
+const hmsetAsync = promisify(client.hmset).bind(client);
+
+hmsetAsync(testKeyNaME, {
+    name: 'John Doe',
+    age: 42,
+  })
+  .then(res => console.log(res)) // OK
+  .then(() => client.quit());
+  
+  
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const reply = await client.hmsetAsync(testKeyNaME, {
+  name: 'John Doe',
+  age: 42,
+});
 console.log(reply); // OK
 client.quit();
 ```
@@ -401,12 +447,14 @@ __________________________________________________
 __________________________________________________
 <br><br>
 
+# Read Data
 
-# GET (https://redis.io/commands/get)
+
+## GET (https://redis.io/commands/get)
 ```javascript
 // callback
-client.get('hello', (getErr, getReply) => {
-  console.log(getReply); // world
+client.get('hello', (e, res) => {
+  console.log(res); // world
   client.quit();
 });
 
@@ -426,6 +474,46 @@ bluebird.promisifyAll(redis);
 
 const keyValue = await client.getAsync('hello');
 console.log(keyValue); // world
+client.quit();
+```
+
+
+<br><br>
+
+
+## HGETALL (https://redis.io/commands/hgetall)
+```javascript
+/*
+testKeyNaME = {
+    name: 'John Doe',
+    age: 42,
+  };
+*/
+
+// callback
+client.hgetall(testKeyName, (e, res) => {
+  console.log(typeof res); // object
+  client.quit();
+});
+
+
+// promises
+const { promisify } = require('util');
+const hgetallAsync = promisify(client.hgetall).bind(client);
+
+hgetallAsync(testKeyName)
+  .then(res => {
+     console.log(typeof res); // object
+   })
+  .then(() => client.quit());
+  
+
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const keyValue = await client.hgetallAsync(testKeyName);
+console.log(typeof res); // object
 client.quit();
 ```
 
@@ -503,6 +591,7 @@ client.incrbyfloat(testKeyValue, 1, (e, res) => {
 
 
 // promises
+const { promisify } = require('util');
 const getIncrbyfloat = promisify(client.incrbyfloat).bind(client);
 
 getIncrbyfloat(testKeyValue, 1)
@@ -514,6 +603,9 @@ getIncrbyfloat(testKeyValue, 1)
   
 
 // await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
 const res = await client.incrbyfloatAsync(testKeyValue, 1);
 console.log(typeof res); // string
 console.log(res); // 23.5
