@@ -1621,12 +1621,30 @@ __________________________________________________
 <br> count < 0: Remove elements equal to element moving from tail to head.
 <br> count = 0: Remove all elements equal to element.
 - **Be carefully with large datasets cause of perfomance**
+
+<br><br>
+
+Syntax:
 ```javascript
-/* testKeyName = ['Mars', 'Pluto', 'Sun', 'Earth', 'Earth'] */
+LREM listName count value
+```
+
+```javascript
+/*
+Our list looks like this:
+planets: Sun, Earth, Pluto
+*/
+
+const query = [
+  testKeyName,
+  1,
+  'Earth',
+];
+
 
 // callback
-client.lrem(testKeyName, 1, 'Earth', (e, res) => {
-  console.log(res)  // ['Mars', 'Pluto', 'Sun', 'Earth']
+client.lrem(...query, (e, res) => {
+  console.log(res)  // ['Sun', 'Pluto']
   client.quit();
 });
 
@@ -1635,8 +1653,8 @@ client.lrem(testKeyName, 1, 'Earth', (e, res) => {
 const { promisify } = require('util');
 const lremAsync = promisify(client.lrem).bind(client);
 
-getAsync(testKeyName, 1, 'Earth')
-  .then(res => console.log(res)) // ['Mars', 'Pluto', 'Sun', 'Earth']
+getAsync(...query)
+  .then(res => console.log(res)) // ['Sun', 'Pluto']
   .then(() => client.quit());
   
 
@@ -1644,8 +1662,8 @@ getAsync(testKeyName, 1, 'Earth')
 const bluebird = require('bluebird');
 bluebird.promisifyAll(redis);
 
-const res = await client.lremAsync(testKeyName, 1, 'Earth');
-console.log(res);  // ['Mars', 'Pluto', 'Sun', 'Earth']
+const res = await client.lremAsync(...query);
+console.log(res);  // ['Sun', 'Pluto']
 client.quit();
 ```
 
@@ -1658,10 +1676,13 @@ client.quit();
 ## RPOP (https://redis.io/commands/rpop)
 - Removes and returns the last elements of the list stored at key. By default, the command pops a single element from the end of the list. When provided with the optional count argument, the reply will consist of up to count elements, depending on the list's length.
 ```javascript
-/* testKeyName = ['Mars', 'Pluto', 'Sun', 'Earth'] */
+/*
+Our list looks like this:
+planets: Mars, Pluto, Sun, Earth
+*/
 
 // callback
-client.rpop(testKeyName, (e, res) => {
+client.rpop('planets', (e, res) => {
   console.log(res)  // Earth <-- ['Mars', 'Pluto', 'Sun']
   client.quit();
 });
@@ -1671,7 +1692,7 @@ client.rpop(testKeyName, (e, res) => {
 const { promisify } = require('util');
 const rpopAsync = promisify(client.rpop).bind(client);
 
-rpopAsync(testKeyName)
+rpopAsync('planets')
   .then(res => console.log(res)) // Earth <-- ['Mars', 'Pluto', 'Sun']
   .then(() => client.quit());
   
@@ -1680,7 +1701,7 @@ rpopAsync(testKeyName)
 const bluebird = require('bluebird');
 bluebird.promisifyAll(redis);
 
-const res = await client.rpopAsync(testKeyName);
+const res = await client.rpopAsync('planets');
 console.log(res);  // Earth <-- ['Mars', 'Pluto', 'Sun']
 client.quit();
 ```
@@ -1699,10 +1720,18 @@ client.quit();
 ## SREM (https://redis.io/commands/srem)
 - Remove the specified members from the set stored at key. Specified members that are not a member of this set are ignored. If key does not exist, it is treated as an empty set and this command returns 0. An error is returned when the value stored at key is not a set.
 ```javascript
-/* testKeyName = ['Mars', 'Pluto', 'Sun', 'Earth'] */
+/*
+Our set looks like this:
+planets: Mars, Pluto, Sun, Earth
+*/
+
+const query = [
+  'planets',
+  'Pluto',
+];
 
 // callback
-client.srem(testKeyName, 'Pluto' (e, res) => {
+client.srem(...query, (e, res) => {
   console.log(res)  // 1 <-- shows how many data got removed
   client.quit();
 });
@@ -1712,7 +1741,7 @@ client.srem(testKeyName, 'Pluto' (e, res) => {
 const { promisify } = require('util');
 const sremAsync = promisify(client.srem).bind(client);
 
-sremAsync(testKeyName, 'Pluto')
+sremAsync(...query)
   .then(res => console.log(res)) // 1 <-- shows how many data got removed
   .then(() => client.quit());
   
@@ -1721,7 +1750,7 @@ sremAsync(testKeyName, 'Pluto')
 const bluebird = require('bluebird');
 bluebird.promisifyAll(redis);
 
-const res = await client.sremAsync(testKeyName, 'Pluto');
+const res = await client.sremAsync(...query);
 console.log(res);  // 1 <-- shows how many data got removed
 client.quit();
 ```
@@ -1785,10 +1814,19 @@ __________________________________________________
 # INCRBYFLOAT (https://redis.io/commands/incrbyfloat)
 - Increment the string representing a floating point number stored at key by the specified increment. By using a negative increment value, the result is that the value stored at the key is decremented (by the obvious properties of addition). If the key does not exist, it is set to 0 before performing the operation.
 ```javascript
-// testKeyValue = 22.5
+/*
+Our string looks like this:
+temperature: 22.5
+*/
+
+
+const query = [
+  'temperature',
+  1,
+];
 
 // callback
-client.incrbyfloat(testKeyValue, 1, (e, res) => {
+client.incrbyfloat(...query, (e, res) => {
    console.log(typeof res); // string
    console.log(res); // 23.5
    client.quit();
@@ -1799,7 +1837,7 @@ client.incrbyfloat(testKeyValue, 1, (e, res) => {
 const { promisify } = require('util');
 const getIncrbyfloat = promisify(client.incrbyfloat).bind(client);
 
-getIncrbyfloat(testKeyValue, 1)
+getIncrbyfloat(...query)
   .then(res => {
     console.log(typeof res); // string
     console.log(res); // 23.5
@@ -1811,7 +1849,7 @@ getIncrbyfloat(testKeyValue, 1)
 const bluebird = require('bluebird');
 bluebird.promisifyAll(redis);
 
-const res = await client.incrbyfloatAsync(testKeyValue, 1);
+const res = await client.incrbyfloatAsync(...query);
 console.log(typeof res); // string
 console.log(res); // 23.5
 client.quit();
