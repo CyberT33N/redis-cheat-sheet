@@ -367,12 +367,111 @@ client.quit();
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<br><br>
+
+
+
+## HSET (https://redis.io/commands/hset)
+- Sets field in the hash stored at key to value. If key does not exist, a new key holding a hash is created. If field already exists in the hash, it is overwritten.
+
+As of Redis 4.0.0, HSET is variadic and allows for multiple field/value pairs.
+```javascript
+/* ---- EXAMPLE #1 - Sinle Value ----- */
+
+// callback
+client.hset(testKeyNaME, 'testValue', (e, res) => {
+  console.log(res); // OK
+  client.quit();
+});
+
+
+// promise
+const { promisify } = require('util');
+const hsetAsync = promisify(client.hset).bind(client);
+
+hsetAsync(testKeyNaME, 'testValue')
+  .then(res => console.log(res)) // OK
+  .then(() => client.quit());
+  
+  
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const res = await client.hsetAsync(testKeyNaME, 'testValue');
+console.log(res); // OK
+client.quit();
+
+
+
+
+
+
+
+
+
+
+
+/* ---- EXAMPLE #2 - Multiple Values ----- */
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+const earthProps = {
+    diameterKM: 12756,
+    dayLengthHours: 24,
+    meanTempC: 15,
+    moonCount: 1,
+};
+
+// Set the fields one at a time...
+await Promise.all(
+  Object.keys(earthProps).map(
+    key => client.hsetAsync('earth', key, earthProps[key]),
+  ),
+);
+```
+
+
+
 <br><br>
 
 
 
 ## HMSET (https://redis.io/commands/hmset)
 - Sets the specified fields to their respective values in the hash stored at key. This command overwrites any specified fields already existing in the hash. If key does not exist, a new key holding a hash is created.
+- Instead to HSET you can directly insert an Object. This is way more usefully than manually iterate over each object key at HSET.
 ```javascript
 // callback
 client.hmset(testKeyNaME, {
