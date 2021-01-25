@@ -615,6 +615,49 @@ client.quit();
 
 
 
+<br><br>
+
+
+## LRANGE (https://redis.io/commands/lrange)
+- Returns the specified elements of the list stored at key. The offsets start and stop are zero-based indexes, with 0 being the first element of the list (the head of the list), 1 being the next element and so on. These offsets can also be negative numbers indicating offsets starting at the end of the list. For example, -1 is the last element of the list, -2 the penultimate, and so on.
+```javascript
+/*
+testKeyName = ['Mars', 'Pluto', 'Sun', 'Earth', 'Earth']
+*/
+
+// callback
+client.lrange(testKeyName, (e, res) => {
+  console.log(res); // ['Mars', 'Pluto', 'Sun', 'Earth', 'Earth']
+  client.quit();
+});
+
+
+// promises
+const { promisify } = require('util');
+const lrangeAsync = promisify(client.lrange).bind(client);
+
+lrangeAsync(testKeyName)
+  .then(res => {
+     console.log(res); // ['Mars', 'Pluto', 'Sun', 'Earth', 'Earth']
+   })
+  .then(() => client.quit());
+  
+
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const res = await client.lrangeAsync(testKeyName);
+console.log(res); // ['Mars', 'Pluto', 'Sun', 'Earth', 'Earth']
+client.quit();
+```
+
+
+
+
+
+
+
 
 
 
