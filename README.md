@@ -621,12 +621,10 @@ client.quit();
 ## LRANGE (https://redis.io/commands/lrange)
 - Returns the specified elements of the list stored at key. The offsets start and stop are zero-based indexes, with 0 being the first element of the list (the head of the list), 1 being the next element and so on. These offsets can also be negative numbers indicating offsets starting at the end of the list. For example, -1 is the last element of the list, -2 the penultimate, and so on.
 ```javascript
-/*
-testKeyName = ['Mars', 'Pluto', 'Sun', 'Earth', 'Earth']
-*/
+/* testKeyName = ['Mars', 'Pluto', 'Sun', 'Earth', 'Earth'] */
 
 // callback
-client.lrange(testKeyName, (e, res) => {
+client.lrange(testKeyName, 0, -1, (e, res) => {
   console.log(res); // ['Mars', 'Pluto', 'Sun', 'Earth', 'Earth']
   client.quit();
 });
@@ -636,7 +634,7 @@ client.lrange(testKeyName, (e, res) => {
 const { promisify } = require('util');
 const lrangeAsync = promisify(client.lrange).bind(client);
 
-lrangeAsync(testKeyName)
+lrangeAsync(testKeyName, 0, -1)
   .then(res => {
      console.log(res); // ['Mars', 'Pluto', 'Sun', 'Earth', 'Earth']
    })
@@ -647,10 +645,122 @@ lrangeAsync(testKeyName)
 const bluebird = require('bluebird');
 bluebird.promisifyAll(redis);
 
-const res = await client.lrangeAsync(testKeyName);
+const res = await client.lrangeAsync(testKeyName, 0, -1);
 console.log(res); // ['Mars', 'Pluto', 'Sun', 'Earth', 'Earth']
 client.quit();
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<br><br>
+__________________________________________________
+__________________________________________________
+<br><br>
+
+# Delete Data
+
+
+## LREM (https://redis.io/commands/lrem)
+- Removes the first count occurrences of elements equal to element from the list stored at key. The count argument influences the operation in the following ways:
+<br> count > 0: Remove elements equal to element moving from head to tail.
+<br> count < 0: Remove elements equal to element moving from tail to head.
+<br> count = 0: Remove all elements equal to element.
+
+```javascript
+/* testKeyName = ['Mars', 'Pluto', 'Sun', 'Earth', 'Earth'] */
+
+// callback
+client.lrem(testKeyName, 1, 'Earth', (e, res) => {
+  console.log(res)  // ['Mars', 'Pluto', 'Sun', 'Earth']
+  client.quit();
+});
+
+
+// promises
+const { promisify } = require('util');
+const lremAsync = promisify(client.lrem).bind(client);
+
+getAsync(testKeyName, 1, 'Earth')
+  .then(res => console.log(res)) // ['Mars', 'Pluto', 'Sun', 'Earth']
+  .then(() => client.quit());
+  
+
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const res = await client.lremAsync(testKeyName, 1, 'Earth');
+console.log(res);  // ['Mars', 'Pluto', 'Sun', 'Earth']
+client.quit();
+```
+
+
+<br><br>
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
