@@ -106,9 +106,12 @@ __________________________________________________
 <br><br>
 
 
+# Types
+
+<br><br>
 
 
-# Type Mappings
+## Type Mappings
 
 |Redis Type|Javascript Type|
 |---|---|
@@ -119,7 +122,11 @@ __________________________________________________
 |float|String|
 |integer|number|
 
+<br><br>
 
+
+## Hash
+- All values are string
 
 
 
@@ -661,6 +668,7 @@ client.quit();
 
 ## LRANGE (https://redis.io/commands/lrange)
 - Returns the specified elements of the list stored at key. The offsets start and stop are zero-based indexes, with 0 being the first element of the list (the head of the list), 1 being the next element and so on. These offsets can also be negative numbers indicating offsets starting at the end of the list. For example, -1 is the last element of the list, -2 the penultimate, and so on.
+- **Be carefully with large datasets cause of perfomance**
 ```javascript
 /* testKeyName = ['Mars', 'Pluto', 'Sun', 'Earth', 'Earth'] */
 
@@ -748,6 +756,7 @@ client.quit();
 
 ## SMEMBERS (https://redis.io/commands/smembers)
 - Returns all the members of the set value stored at key. This has the same effect as running SINTER with one argument key.
+- **Be carefully with large datasets cause of perfomance. Use SSCAN instead:**
 ```javascript
 /* testKeyName = ['Mars', 'Pluto', 'Sun', 'Earth'] */
 
@@ -842,7 +851,7 @@ __________________________________________________
 <br> count > 0: Remove elements equal to element moving from head to tail.
 <br> count < 0: Remove elements equal to element moving from tail to head.
 <br> count = 0: Remove all elements equal to element.
-
+- **Be carefully with large datasets cause of perfomance**
 ```javascript
 /* testKeyName = ['Mars', 'Pluto', 'Sun', 'Earth', 'Earth'] */
 
