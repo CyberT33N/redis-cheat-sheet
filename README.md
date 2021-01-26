@@ -2125,6 +2125,8 @@ ZREVRANGE sortedSetName 0 -1
 ```
 
 ```javascript
+// ---- EXAMPLE #1 - without WITHSCORES ----
+
 /*
 Our sorted set looks like this:
 planets: Sun:1, Earth:2, Pluto:3, Moon:4
@@ -2161,6 +2163,46 @@ bluebird.promisifyAll(redis);
 const res = await client.zrevrangeAsync(...query);
 console.log(res); // ['Moon', 'Pluto', 'Earth', 'Sun']
 client.quit();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ---- EXAMPLE #2 - with WITHSCORES ----
+
+/*
+Our sorted set looks like this:
+planets: Sun:1, Earth:2, Pluto:3, Moon:4
+*/
+
+const query = [
+  'planets',
+  0,
+  -1,
+  'WITHSCORES',
+];
+
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const res = await client.zrevrangeAsync(...query);
+console.log(res); // ['Moon', '4', 'Pluto', '3', 'Earth', '2', 'Sun', '1']
+client.quit();
 ```
 
 
@@ -2184,6 +2226,8 @@ ZRANGE setName 0 -1
 ```
 
 ```javascript
+// ---- EXAMPLE #1 - without WITHSCORES ----
+
 /*
 Our sorted set looks like this:
 planets: Sun:1, Earth:2, Pluto:3, Moon:4
@@ -2219,6 +2263,44 @@ bluebird.promisifyAll(redis);
 
 const res = await client.zrangeAsync(...query);
 console.log(res); // ['Sun', 'Earth', 'Pluto', 'Moon']
+client.quit();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ---- EXAMPLE #2 - with WITHSCORES ----
+
+/*
+Our sorted set looks like this:
+planets: Sun:1, Earth:2, Pluto:3, Moon:4
+*/
+
+const query = [
+  'planets',
+  0,
+  -1,
+  'WITHSCORES',
+];
+
+
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const res = await client.zrangeAsync(...query);
+console.log(res); // ['Sun', '1', 'Earth', '2', 'Pluto', '3', 'Moon', '4']
 client.quit();
 ```
 
