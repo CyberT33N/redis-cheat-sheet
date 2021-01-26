@@ -2809,3 +2809,47 @@ client.quit();
 
 
 
+
+<br><br>
+__________________________________________________
+__________________________________________________
+<br><br>
+
+
+
+
+
+# Pipeline
+- https://www.youtube.com/watch?v=sXCov8qlRv8
+- Instead of sending single requests each time we can use a pipeline to stack our operations inside of one single request!
+<br><br>
+
+## EXEC (https://redis.io/commands/exec)
+```javascript
+const pipeline = client.batch();
+const testKey = `${testKeyPrefix}:example_pipeline`;
+const testKey2 = `${testKeyPrefix}:example_pipeline_2`;
+
+pipeline.hset(testKey, 'available', 'true');
+pipeline.expire(testKey, 1000);
+pipeline.sadd(testKey2, 1);
+
+const responses = await pipeline.execAsync();
+
+expect(responses).toHaveLength(3);
+expect(responses[0]).toBe(1);
+expect(responses[1]).toBe(1);
+expect(responses[2]).toBe(1);
+```
+
+
+
+
+
+
+
+
+
+
+
+
