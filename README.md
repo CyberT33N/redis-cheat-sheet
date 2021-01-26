@@ -2166,6 +2166,84 @@ client.quit();
 
 
 
+
+
+
+
+
+
+
+<br><br>
+
+
+## ZCOUNT (https://redis.io/commands/zcount)
+- Returns the number of elements in the sorted set at key with a score between min and max. The min and max arguments have the same semantic as described for ZRANGEBYSCORE.
+
+<br>
+
+Syntax:
+```javascript
+// get count of all member
+ZCOUNT setName -inf +inf
+
+// specific range
+ZCOUNT myzset (1 3
+```
+
+```javascript
+/*
+Our sorted set looks like this:
+planets: Sun:1, Earth:2, Pluto:3, Moon:4
+*/
+
+const query = [
+  'planets',
+  '-inf',
+  '+inf',
+];
+
+// callback
+client.zcount(...query, (e, res) => {
+  console.log(res); // 4
+  client.quit();
+});
+
+
+// promises
+const { promisify } = require('util');
+const zcountAsync = promisify(client.zcount).bind(client);
+
+zcountAsync(...query)
+  .then(res => {
+     console.log(res); // 4
+   })
+  .then(() => client.quit());
+  
+
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const res = await client.zcountAsync(...query);
+console.log(res); // 4
+client.quit();
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <br><br>
 
 
