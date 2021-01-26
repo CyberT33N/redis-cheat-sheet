@@ -2663,8 +2663,8 @@ __________________________________________________
 
 <br><br>
 
-## LOAD ((https://redis.io/commands/script-load))
-
+## LOAD (https://redis.io/commands/script-load)
+- Load a script into the scripts cache, without executing it. After the specified command is loaded into the script cache it will be callable using EVALSHA with the correct SHA1 digest of the script, exactly like after the first successful invocation of EVAL.
 ```javascript
 const query = [
   'load',
@@ -2673,7 +2673,7 @@ const query = [
 
 // callback
 client.script(...query, (e, res) => {
-  console.log(res)
+  console.log(res) // returns SHA
   client.quit();
 });
 
@@ -2683,7 +2683,7 @@ const { promisify } = require('util');
 const scriptAsync = promisify(client.script).bind(client);
 
 scriptAsync(...query)
-  .then(res => console.log(res))
+  .then(res => console.log(res)) // returns SHA
   .then(() => client.quit());
   
 
@@ -2692,7 +2692,56 @@ const bluebird = require('bluebird');
 bluebird.promisifyAll(redis);
 
 const res = await client.scriptAsync(...query);
-console.log(res);
+console.log(res); // returns SHA
+client.quit();
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+<br><br>
+
+## EVALSHA (https://redis.io/commands/evalsha)
+- Evaluates a script cached on the server side by its SHA1 digest. Scripts are cached on the server side using the SCRIPT LOAD command. The command is otherwise identical to EVAL.
+```javascript
+const query = [
+  sha,
+  1, // number of redis keys
+  keyName, // where the script will oeprate on
+  value, // value which will be set if script successfully
+];
+
+// callback
+client.evalsha(...query, (e, res) => {
+  console.log(res) // 1
+  client.quit();
+});
+
+
+// promises
+const { promisify } = require('util');
+const evalshaAsync = promisify(client.evalsha).bind(client);
+
+evalshaAsync(...query)
+  .then(res => console.log(res)) // 1
+  .then(() => client.quit());
+  
+
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const res = await client.evalshaAsync(...query);
+console.log(res); // 1
 client.quit();
 ```
 
