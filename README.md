@@ -193,6 +193,13 @@ keyPrefix(optional) - collectionName(optional) - keyName:string/list/set/hash
 
 <br>
 
+Try to choose a good key naming for your scoping like as example:
+```javascript
+sites:capacity:ranking:[city]
+```
+
+<br>
+
 The difference to sets is that our members got scores. Those scores get automatically sortedin ascending order:
 ```javascript
 planets: Earth:1, Pluto:2, Earth:3
