@@ -2855,6 +2855,79 @@ client.quit();
 
 
 
+
+
+<br><br>
+
+
+## ZRANGEBYSCORE (https://redis.io/commands/zrangebyscore)
+- Returns all the elements in the sorted set at key with a score between min and max (including elements with score equal to min or max). The elements are considered to be ordered from low to high scores.
+
+<br>
+
+Syntax:
+```javascript
+ZRANGEBYSCORE sortedSetName min max
+
+// get all
+ZRANGEBYSCORE sortedSetName -inf +inf
+```
+
+```javascript
+/*
+Our sorted set looks like this:
+planets: Sun:1, Earth:2, Pluto:3, Moon:4
+*/
+
+const query = [
+  'planets',
+  1,
+  2,
+];
+
+
+// callback
+client.zrangebyscore(...query, (e, res) => {
+  console.log(res); // ['Sun', 'Earth']
+  client.quit();
+});
+
+
+// promises
+const { promisify } = require('util');
+const zrangebyscoreAsync = promisify(client.zrangebyscore).bind(client);
+
+zrangebyscoreAsync(...query)
+  .then(res => {
+     console.log(res); // ['Sun', 'Earth']
+   })
+  .then(() => client.quit());
+  
+
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const res = await client.zrangebyscoreAsync(...query);
+console.log(res); // ['Sun', 'Earth']
+client.quit();
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <br><br>
 
 
