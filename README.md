@@ -2811,6 +2811,59 @@ client.quit();
 
 
 
+<br><br>
+
+
+
+
+
+## ZREM (https://redis.io/commands/zrem)
+- Removes the specified members from the sorted set stored at key. Non existing members are ignored. An error is returned when key exists and does not hold a sorted set.
+
+<br>
+
+Syntax:
+```javascript
+ZREM sortedSetName keyName
+```
+
+<br>
+
+```javascript
+/*
+Our sorted set looks like this:
+planets: Mars:1, Pluto:2, Sun:3, Earth:4
+*/
+
+const query = [
+  'planets',
+  'Pluto',
+];
+
+// callback
+client.zrem(...query, (e, res) => {
+  console.log(res)  // true or false <-- In our planets set it will look like this: Mars:1, Sun:3, Earth:4
+  client.quit();
+});
+
+
+// promises
+const { promisify } = require('util');
+const zremAsync = promisify(client.zrem).bind(client);
+
+zremAsync(...query)
+  .then(res => console.log(res)) // true or false <-- In our planets set it will look like this: Mars:1, Sun:3, Earth:4
+  .then(() => client.quit());
+  
+
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const res = await client.zremAsync(...query);
+console.log(res);  // true or false <-- In our planets set it will look like this: Mars:1, Sun:3, Earth:4
+client.quit();
+```
 
 
 
@@ -2825,6 +2878,8 @@ client.quit();
 
 
 
+
+<br><br>
 
 
 
