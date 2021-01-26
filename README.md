@@ -1065,6 +1065,111 @@ client.quit();
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<br><br>
+
+
+
+## ZADD (https://redis.io/commands/zadd)
+- Adds all the specified members with the specified scores to the sorted set stored at key. It is possible to specify multiple score / member pairs. If a specified member is already a member of the sorted set, the score is updated and the element reinserted at the right position to ensure the correct ordering.
+
+<br><br>
+
+Syntax:
+```javascript
+ZADD sortedSetname 2 "value" 3 "value"
+```
+
+<br><br>
+
+```javascript
+const query = [
+  'planets',
+  1,
+  'Earth',
+  2,
+  'sun',
+];
+
+// callback
+client.zadd(...query, (e, res) => {
+  console.log(res); // OK
+  client.quit();
+});
+
+
+// promise
+const { promisify } = require('util');
+const zaddAsync = promisify(client.zadd).bind(client);
+
+zaddAsync(...query)
+  .then(res => console.log(res)) // OK
+  .then(() => client.quit());
+  
+  
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const res = await client.zaddAsync(...query);
+console.log(res); // OK
+client.quit();
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <br><br>
 
 
