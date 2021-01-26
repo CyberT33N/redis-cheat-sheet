@@ -1402,6 +1402,129 @@ client.quit();
 
 
 
+## HINCRBY (https://redis.io/commands/hincrby)
+- Increments the number stored at field in the hash stored at key by increment. If key does not exist, a new key holding a hash is created. If field does not exist the value is set to 0 before the operation is performed. The range of values supported by HINCRBY is limited to 64 bit signed integers.
+
+Syntax:
+```javascript
+HINCRBY hashName field number
+```
+
+```javascript
+/*
+hash looks like this:
+birth: Peter 1993 Lena 1994
+*/
+
+
+const query = ['birth', 'Peter', 2];
+
+// callback
+client.hincrby(...query, (e, res) => {
+  console.log(res); // 1995
+  client.quit();
+});
+
+
+// promise
+const { promisify } = require('util');
+const hincrbyAsync = promisify(client.hincrby).bind(client);
+
+hincrbyAsync(...query)
+  .then(res => {
+    console.log(res); // 1995
+  }) // OK
+  .then(() => client.quit());
+  
+  
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const res = await client.hincrbyAsync(...query);
+console.log(res); // 1995
+client.quit();
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
