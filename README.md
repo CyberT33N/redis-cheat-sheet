@@ -2589,6 +2589,96 @@ client.quit();
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<br><br>
+
+
+## GEORADIUS (https://redis.io/commands/georadius)
+- Return the members of a sorted set populated with geospatial information using GEOADD, which are within the borders of the area specified with the center location and the maximum distance from the center (the radius).
+
+<br>
+
+Syntax:
+```javascript
+GEORADIUS sortedSetName longitude latitude radius m|km|ft|mi WITHCOORD|WITHDIST|WITHHASH
+```
+
+```javascript
+/*
+Our sorted set looks like this:
+Sicily: Palermo:34xxxx698, Catania:33xxxx628,
+*/
+
+const query = [
+  'Sicily',
+  15,
+  37,
+  200,
+  'km',
+  'WITHDIST'
+];
+
+
+// callback
+client.georadius(...query, (e, res) => {
+  console.log(res); // [[Palermo", "190.4424"], ["Catania", "56.4413"]]
+  client.quit();
+});
+
+
+// promises
+const { promisify } = require('util');
+const georadiusAsync = promisify(client.georadius).bind(client);
+
+georadiusAsync(...query)
+  .then(res => {
+     console.log(res); // [[Palermo", "190.4424"], ["Catania", "56.4413"]]
+   })
+  .then(() => client.quit());
+  
+
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const res = await client.georadiusAsync(...query);
+console.log(res); // [[Palermo", "190.4424"], ["Catania", "56.4413"]]
+client.quit();
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <br><br>
 
 
