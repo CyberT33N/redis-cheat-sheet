@@ -196,7 +196,7 @@ prefix:metric:date:id
 
 <br><br>
 
-Because sets can not contain duplicated data we will give each member in our set an unique ID like in this example:
+The difference to sets is that our members got scores. Those scores get automatically sortedin ascending order:
 ```javascript
 planets: Earth:1, Pluto:2, Earth:3
 ```
