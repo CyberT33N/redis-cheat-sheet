@@ -536,6 +536,78 @@ module.exports = {
 
 
 
+<br><br>
+__________________________________________________
+__________________________________________________
+<br><br>
+
+
+
+
+# CLI (https://redis.io/topics/rediscli)
+```javascript
+redis-cli
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 <br><br>
@@ -1745,6 +1817,67 @@ client.quit();
 
 
 
+
+
+
+
+
+
+
+
+
+
+<br><br>
+
+
+## ZREVRANGE (https://redis.io/commands/zrevrange)
+- Returns the specified range of elements in the sorted set stored at key. The elements are considered to be ordered from the highest to the lowest score. Descending lexicographical order is used for elements with equal score.
+
+<br><br>
+
+Syntax:
+```javascript
+ZREVRANGE sortedSetName 0 -1
+```
+
+```javascript
+/*
+Our sorted set looks like this:
+planets: Sun:1, Earth:2, Pluto:3, Moon:4
+*/
+
+const query = [
+  'planets',
+  0,
+  -1,
+];
+
+// callback
+client.zrevrange(...query, (e, res) => {
+  console.log(res); // ['Sun', 'Earth', 'Pluto', 'Moon']
+  client.quit();
+});
+
+
+// promises
+const { promisify } = require('util');
+const zrevrangeAsync = promisify(client.zrevrange).bind(client);
+
+zrevrangeAsync(...query)
+  .then(res => {
+     console.log(res); // ['Sun', 'Earth', 'Pluto', 'Moon']
+   })
+  .then(() => client.quit());
+  
+
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const res = await client.zrevrangeAsync(...query);
+console.log(res); // ['Sun', 'Earth', 'Pluto', 'Moon']
+client.quit();
+```
 
 
 
