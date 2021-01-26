@@ -2616,10 +2616,12 @@ client.quit();
 
 Syntax:
 ```javascript
-GEORADIUS sortedSetName longitude latitude radius m|km|ft|mi WITHCOORD|WITHDIST|WITHHASH
+GEORADIUS sortedSetName longitude latitude radius m|km|ft|mi WITHCOORD|WITHDIST|WITHHASH COUNT count [ANY] ASC|DESC STORE key STOREDIST key
 ```
 
 ```javascript
+// ---- EXAMPLE #1 - with WITHDIST ----
+
 /*
 Our sorted set looks like this:
 Sicily: Palermo:34xxxx698, Catania:33xxxx628,
@@ -2659,6 +2661,53 @@ bluebird.promisifyAll(redis);
 
 const res = await client.georadiusAsync(...query);
 console.log(res); // [[Palermo", "190.4424"], ["Catania", "56.4413"]]
+client.quit();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ---- EXAMPLE #2 - with STORE (Store the items in a sorted set populated with their geospatial information.) ----
+
+/*
+Our sorted set looks like this:
+Sicily: Palermo:34xxxx698, Catania:33xxxx628,
+*/
+
+const query = [
+  'Sicily',
+  15,
+  37,
+  200,
+  'km',
+  'STORE',
+  'storeSampleKeyName'
+];
+
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const res = await client.georadiusAsync(...query);
+console.log(res); // 34 <--- amount of matches
 client.quit();
 ```
 
