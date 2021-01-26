@@ -187,7 +187,7 @@ keyPrefix(optional) - collectionName(optional) - keyName:string/list/set/hash
 
 
 
-## Sorted Sets
+## Sorted Sets (ZSET)
 - https://www.youtube.com/watch?v=pk2TAc89bwE
 - First we make sure to choose an unique prefix and metric and maybe aswell a timestamp for our syntax:
 ```javascript
