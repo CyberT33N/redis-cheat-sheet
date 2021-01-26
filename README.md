@@ -1502,10 +1502,10 @@ client.quit();
 Syntax:
 ```javascript
 // single import
-GEOADD sortedSetName latitude, longitude, name
+GEOADD sortedSetName latitude, longitude, keyName
 
 // multiple imports
-GEOADD sortedSetName latitude, longitude, name, latitude, longitude, name
+GEOADD sortedSetName latitude, longitude, keyName, latitude, longitude, keyName
 ```
 
 ```javascript
