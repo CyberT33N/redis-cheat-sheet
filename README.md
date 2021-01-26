@@ -2166,6 +2166,56 @@ client.quit();
 
 
 
+<br><br>
+
+
+## EXISTS (https://redis.io/commands/exists)
+- Since Redis 3.0.3 it is possible to specify multiple keys instead of a single one. In such a case, it returns the total number of keys existing. Note that returning 1 or 0 for a single key is just a special case of the variadic usage, so the command is completely backward compatible.
+
+<br><br>
+
+Syntax:
+```javascript
+EXISTS keyName
+```
+
+```javascript
+// callback
+client.exists('keyName', (e, res) => {
+  console.log(res); // true or false
+  client.quit();
+});
+
+
+// promises
+const { promisify } = require('util');
+const existsAsync = promisify(client.exists).bind(client);
+
+existsAsync('keyName')
+  .then(res => {
+     console.log(res); // true or false
+   })
+  .then(() => client.quit());
+  
+
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const res = await client.existsAsync('keyName');
+console.log(res); // true or false
+client.quit();
+```
+
+
+
+
+
+
+
+
+
+
 
 
 
