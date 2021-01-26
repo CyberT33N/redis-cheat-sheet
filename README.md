@@ -1226,6 +1226,55 @@ client.quit();
 
 
 
+<br><br>
+
+
+
+
+# INCRBYFLOAT (https://redis.io/commands/incrbyfloat)
+- Increment the string representing a floating point number stored at key by the specified increment. By using a negative increment value, the result is that the value stored at the key is decremented (by the obvious properties of addition). If the key does not exist, it is set to 0 before performing the operation.
+```javascript
+/*
+Our string looks like this:
+temperature: 22.5
+*/
+
+
+const query = [
+  'temperature',
+  1,
+];
+
+// callback
+client.incrbyfloat(...query, (e, res) => {
+   console.log(typeof res); // string
+   console.log(res); // 23.5
+   client.quit();
+});
+
+
+// promises
+const { promisify } = require('util');
+const getIncrbyfloat = promisify(client.incrbyfloat).bind(client);
+
+getIncrbyfloat(...query)
+  .then(res => {
+    console.log(typeof res); // string
+    console.log(res); // 23.5
+   })
+  .then(() => client.quit());
+  
+
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const res = await client.incrbyfloatAsync(...query);
+console.log(typeof res); // string
+console.log(res); // 23.5
+client.quit();
+```
+
 
 
 
@@ -2605,37 +2654,36 @@ __________________________________________________
 <br><br>
 
 
-# INCRBYFLOAT (https://redis.io/commands/incrbyfloat)
-- Increment the string representing a floating point number stored at key by the specified increment. By using a negative increment value, the result is that the value stored at the key is decremented (by the obvious properties of addition). If the key does not exist, it is set to 0 before performing the operation.
+
+
+
+# Scripts 
+- https://www.youtube.com/watch?v=jEMK9vBUWr0
+
+
+<br><br>
+
+## LOAD ((https://redis.io/commands/script-load))
+
 ```javascript
-/*
-Our string looks like this:
-temperature: 22.5
-*/
-
-
 const query = [
-  'temperature',
-  1,
+  'load',
+  sourceHere(),
 ];
 
 // callback
-client.incrbyfloat(...query, (e, res) => {
-   console.log(typeof res); // string
-   console.log(res); // 23.5
-   client.quit();
+client.script(...query, (e, res) => {
+  console.log(res)
+  client.quit();
 });
 
 
 // promises
 const { promisify } = require('util');
-const getIncrbyfloat = promisify(client.incrbyfloat).bind(client);
+const scriptAsync = promisify(client.script).bind(client);
 
-getIncrbyfloat(...query)
-  .then(res => {
-    console.log(typeof res); // string
-    console.log(res); // 23.5
-   })
+scriptAsync(...query)
+  .then(res => console.log(res))
   .then(() => client.quit());
   
 
@@ -2643,22 +2691,10 @@ getIncrbyfloat(...query)
 const bluebird = require('bluebird');
 bluebird.promisifyAll(redis);
 
-const res = await client.incrbyfloatAsync(...query);
-console.log(typeof res); // string
-console.log(res); // 23.5
+const res = await client.scriptAsync(...query);
+console.log(res);
 client.quit();
 ```
-
-
-
-
-
-
-
-
-
-
-
 
 
 
