@@ -2816,7 +2816,6 @@ client.quit();
 
 
 
-
 ## ZREM (https://redis.io/commands/zrem)
 - Removes the specified members from the sorted set stored at key. Non existing members are ignored. An error is returned when key exists and does not hold a sorted set.
 
@@ -2842,7 +2841,7 @@ const query = [
 
 // callback
 client.zrem(...query, (e, res) => {
-  console.log(res)  // true or false <-- In our planets set it will look like this: Mars:1, Sun:3, Earth:4
+  console.log(res)  // 1 (amount of member removed) <-- In our planets set it will look like this: Mars:1, Sun:3, Earth:4
   client.quit();
 });
 
@@ -2852,7 +2851,7 @@ const { promisify } = require('util');
 const zremAsync = promisify(client.zrem).bind(client);
 
 zremAsync(...query)
-  .then(res => console.log(res)) // true or false <-- In our planets set it will look like this: Mars:1, Sun:3, Earth:4
+  .then(res => console.log(res)) // 1 (amount of member removed) <-- In our planets set it will look like this: Mars:1, Sun:3, Earth:4
   .then(() => client.quit());
   
 
@@ -2861,7 +2860,7 @@ const bluebird = require('bluebird');
 bluebird.promisifyAll(redis);
 
 const res = await client.zremAsync(...query);
-console.log(res);  // true or false <-- In our planets set it will look like this: Mars:1, Sun:3, Earth:4
+console.log(res);  // 1 (amount of member removed) <-- In our planets set it will look like this: Mars:1, Sun:3, Earth:4
 client.quit();
 ```
 
@@ -2873,6 +2872,61 @@ client.quit();
 
 
 
+<br><br>
+
+
+
+
+## ZREMRANGEBYRANK (https://redis.io/commands/zremrangebyrank)
+- Removes all elements in the sorted set stored at key with rank between start and stop. Both start and stop are 0 -based indexes with 0 being the element with the lowest score. These indexes can be negative numbers, where they indicate offsets starting at the element with the highest score. For example: -1 is the element with the highest score, -2 the element with the second highest score and so forth.
+
+<br>
+
+Syntax:
+```javascript
+ZREMRANGEBYRANK setName startRankNumber endRankNumber
+```
+
+<br>
+
+```javascript
+/*
+Our sorted set looks like this:
+planets: Mars:1, Pluto:2, Sun:3, Earth:4
+*/
+
+const query = [
+  'planets',
+  0,
+  1,
+];
+
+// callback
+client.zremrangebyrank(...query, (e, res) => {
+  console.log(res)  // 1 (amount of member removed) <-- In our planets set it will look like this: Sun:3, Earth:4
+  client.quit();
+});
+
+
+// promises
+const { promisify } = require('util');
+const zremrangebyrankAsync = promisify(client.zremrangebyrank).bind(client);
+
+zremrangebyrankAsync(...query)
+  .then(res => console.log(res)) // 1 (amount of member removed) <-- In our planets set it will look like this: Sun:3, Earth:4
+  .then(() => client.quit());
+  
+
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const res = await client.zremrangebyrankAsync(...query);
+console.log(res); // 1 (amount of member removed) <-- In our planets set it will look like this: Sun:3, Earth:4
+client.quit();
+```
+
+
 
 
 
@@ -2880,7 +2934,6 @@ client.quit();
 
 
 <br><br>
-
 
 
 
