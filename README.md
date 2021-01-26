@@ -2816,7 +2816,24 @@ __________________________________________________
 <br><br>
 
 
+# Pipeline vs Transactions
+- In easy words a transactions will block other clients requests until the transaction was successfully
+<br><br>
 
+## Use a Pipeline when:
+- You have two or more commands to execute
+- Can wait for the responses of all commands at one
+
+<br><br>
+
+## Use transaction if, in addition:
+- You require atomic execution of a set of commands
+- You can afford to block other clients while these command execute
+
+
+
+<br><br>
+<br><br>
 
 
 # Pipeline
@@ -2830,10 +2847,12 @@ const pipeline = client.batch();
 const testKey = `${testKeyPrefix}:example_pipeline`;
 const testKey2 = `${testKeyPrefix}:example_pipeline_2`;
 
+// all of the pipeline operations ARE NOT executed before we use exec later!
 pipeline.hset(testKey, 'available', 'true');
 pipeline.expire(testKey, 1000);
 pipeline.sadd(testKey2, 1);
 
+// we recieve array with all request results
 const responses = await pipeline.execAsync();
 
 expect(responses).toHaveLength(3);
@@ -2843,6 +2862,32 @@ expect(responses[2]).toBe(1);
 ```
 
 
+<br><br>
+<br><br>
+
+# Transaction (https://www.youtube.com/watch?v=_XMYREa5vjg)
+
+<br><br>
+
+
+## MULTI (https://redis.io/commands/multi)
+- Marks the start of a transaction block. Subsequent commands will be queued for atomic execution using EXEC.
+```javascript
+const transaction = client.multi();
+const testKey = `${testKeyPrefix}:example_transaction`;
+const testKey2 = `${testKeyPrefix}:example_transaction_2`;
+
+transaction.hset(testKey, 'available', 'true');
+transaction.expire(testKey, 1000);
+transaction.sadd(testKey2, 1);
+
+const responses = await transaction.execAsync();
+
+expect(responses).toHaveLength(3);
+expect(responses[0]).toBe(1);
+expect(responses[1]).toBe(1);
+expect(responses[2]).toBe(1);
+```
 
 
 
