@@ -1366,38 +1366,6 @@ client.quit();
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ## SMOVE (https://redis.io/commands/smove)
 - Move member from the set at source to the set at destination. This operation is atomic. In every given moment the element will appear to be a member of source or destination for other clients. If the source set does not exist or does not contain the specified element, no operation is performed and 0 is returned. Otherwise, the element is removed from the source set and added to the destination set. When the specified element already exists in the destination set, it is only removed from the source set. An error is returned if source or destination does not hold a set value.
 
@@ -1507,6 +1475,120 @@ const res = await client.hincrbyAsync(...query);
 console.log(res); // 1995
 client.quit();
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## GEOADD (https://redis.io/commands/geoadd)
+- Time complexity: O(log(N)) for each item added, where N is the number of elements in the sorted set. Adds the specified geospatial items (latitude, longitude, name) to the specified key. Data is stored into the key as a sorted set, in a way that makes it possible to query the items with the GEOSEARCH command. The command takes arguments in the standard format x,y so the longitude must be specified before the latitude. There are limits to the coordinates that can be indexed: areas very near to the poles are not indexable.
+
+Syntax:
+```javascript
+// single import
+GEOADD sortedSetName latitude, longitude, name
+
+// multiple imports
+GEOADD sortedSetName latitude, longitude, name, latitude, longitude, name
+```
+
+```javascript
+const query = [
+  'Sicily',
+  '13.361389',
+  '38.115556',
+];
+
+// callback
+client.geoadd(...query, (e, res) => {
+  console.log(res); // 1 <-- returns amount of added members
+  client.quit();
+});
+
+
+// promise
+const { promisify } = require('util');
+const geoaddAsync = promisify(client.geoadd).bind(client);
+
+geoaddAsync(...query)
+  .then(res => {
+    console.log(res); // 1 <-- returns amount of added members
+  }) // OK
+  .then(() => client.quit());
+  
+  
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const res = await client.geoaddAsync(...query);
+console.log(res); // 1 <-- returns amount of added members
+client.quit();
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
