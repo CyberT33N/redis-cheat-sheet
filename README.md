@@ -2385,6 +2385,58 @@ client.quit();
 
 
 
+<br><br>
+
+
+## ZRANK (https://redis.io/commands/zrank)
+- Returns the rank of member in the sorted set stored at key, with the scores ordered from low to high. The rank (or index) is 0-based, which means that the member with the lowest score has rank 0. Use ZREVRANK to get the rank of an element with the scores ordered from high to low.
+
+<br>
+
+Syntax:
+```javascript
+ZRANK sortedSetName keyname
+```
+
+```javascript
+/*
+Our sorted set looks like this:
+planets: Sun:1, Earth:2, Pluto:3, Moon:4
+*/
+
+const query = [
+  'planets',
+  'Earth',
+];
+
+// callback
+client.zrank(...query, (e, res) => {
+  console.log(res); // 1 <-- The rank (or index) is 0-based, which means that the member with the lowest score has rank 0.
+  client.quit();
+});
+
+
+// promises
+const { promisify } = require('util');
+const zrankAsync = promisify(client.zrank).bind(client);
+
+zrankAsync(...query)
+  .then(res => {
+     console.log(res);  // 1 <-- The rank (or index) is 0-based, which means that the member with the lowest score has rank 0.
+   })
+  .then(() => client.quit());
+  
+
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const res = await client.zrankAsync(...query);
+console.log(res);  // 1 <-- The rank (or index) is 0-based, which means that the member with the lowest score has rank 0.
+client.quit();
+```
+
+
 
 
 
