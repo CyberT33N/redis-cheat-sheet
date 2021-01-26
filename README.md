@@ -178,6 +178,64 @@ keyPrefix(optional) - collectionName(optional) - keyName:string/list/set/hash
 
 
 
+<br><br>
+
+
+
+
+
+
+
+
+## Sorted Sets
+- https://www.youtube.com/watch?v=pk2TAc89bwE
+- First we make sure to choose an unique prefix and metric and maybe aswell a timestamp for our syntax:
+```javascript
+prefix:metric:date:id
+```
+
+<br><br>
+
+Because sets can not contain duplicated data we will give each member in our set an unique ID like in this example:
+```javascript
+planets: Earth:1, Pluto:2, Earth:3
+```
+
+<br><br>
+What are the benefits of this way of using sorted sets?
+- It is always sorted
+- Efficiently fetch a small range: O((log n) + m)
+- Efficient inserts: O(log n)
+- Store multiple data inside of a single key saves memory
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1999,4 +2057,79 @@ console.log(typeof res); // string
 console.log(res); // 23.5
 client.quit();
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
