@@ -1350,6 +1350,11 @@ client.quit();
 
 
 
+<br><br>
+
+
+
+
 
 
 
@@ -1430,6 +1435,11 @@ client.quit();
 
 
 
+<br><br>
+
+
+
+
 
 
 ## HINCRBY (https://redis.io/commands/hincrby)
@@ -1485,6 +1495,11 @@ client.quit();
 
 
 
+
+
+
+
+<br><br>
 
 
 
@@ -1545,6 +1560,58 @@ client.quit();
 
 
 
+
+
+
+
+
+<br><br>
+
+
+
+
+
+## ZINTERSTORE (https://redis.io/commands/zinterstore)
+- Computes the intersection of numkeys sorted sets given by the specified keys, and stores the result in destination. It is mandatory to provide the number of input keys (numkeys) before passing the input keys and the other (optional) arguments.
+
+Syntax:
+```javascript
+ZINTERSTORE destinationSortedSetName amountOfSortedSetsWeCompare sortedSetA sortedSetB WEIGHTS weightSortedSetA weightSortedSetB
+```
+
+```javascript
+const query = [
+  'Sicily',
+  '13.361389',
+  '38.115556',
+];
+
+// callback
+client.geoadd(...query, (e, res) => {
+  console.log(res); // 1 <-- returns amount of added members
+  client.quit();
+});
+
+
+// promise
+const { promisify } = require('util');
+const geoaddAsync = promisify(client.geoadd).bind(client);
+
+geoaddAsync(...query)
+  .then(res => {
+    console.log(res); // 1 <-- returns amount of added members
+  }) // OK
+  .then(() => client.quit());
+  
+  
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const res = await client.geoaddAsync(...query);
+console.log(res); // 1 <-- returns amount of added members
+client.quit();
+```
 
 
 
@@ -2699,7 +2766,7 @@ const query = [
   200,
   'km',
   'STORE',
-  'storeSampleKeyName'
+  'sampleSortedSetName'
 ];
 
 // await
