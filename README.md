@@ -2346,6 +2346,78 @@ client.quit();
 
 
 
+## EXPIRE (https://redis.io/commands/expire)
+- Set a timeout on key. After the timeout has expired, the key will automatically be deleted. A key with an associated timeout is often said to be volatile in Redis terminology.
+
+<br><br>
+
+Syntax:
+```javascript
+EXPIRE keyName timeoutValue
+```
+
+```javascript
+/*
+Our string looks like this:
+username Peter123
+*/
+
+const query = [
+  'EXPIRE mykey 10',
+];
+
+// callback
+client.expire(...query, (e, res) => {
+  console.log(res)  // 1 <-- timeout was set
+  client.quit();
+});
+
+
+// promises
+const { promisify } = require('util');
+const expireAsync = promisify(client.expire).bind(client);
+
+expireAsync(...query)
+  .then(res => console.log(res)) // 1 <-- timeout was set
+  .then(() => client.quit());
+  
+
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const res = await client.expireAsync(...query);
+console.log(res);  // 1 <-- timeout was set
+client.quit();
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
