@@ -1580,15 +1580,27 @@ ZINTERSTORE destinationSortedSetName amountOfSortedSetsWeCompare sortedSetA sort
 ```
 
 ```javascript
+/*
+Sorted Set A:
+planetsRed: Sun:1, Neptun:2, Mars:3
+
+Sorted Set B:
+planetsBlue: Earth:1, Moon:2
+*/
+
 const query = [
-  'Sicily',
-  '13.361389',
-  '38.115556',
+  'out',
+  2,
+  'planetsRed',
+  'planetsBlue',
+  'WEIGHTS',
+  2,
+  3,
 ];
 
 // callback
 client.geoadd(...query, (e, res) => {
-  console.log(res); // 1 <-- returns amount of added members
+  console.log(res);
   client.quit();
 });
 
@@ -1599,7 +1611,7 @@ const geoaddAsync = promisify(client.geoadd).bind(client);
 
 geoaddAsync(...query)
   .then(res => {
-    console.log(res); // 1 <-- returns amount of added members
+    console.log(res);
   }) // OK
   .then(() => client.quit());
   
@@ -1609,7 +1621,7 @@ const bluebird = require('bluebird');
 bluebird.promisifyAll(redis);
 
 const res = await client.geoaddAsync(...query);
-console.log(res); // 1 <-- returns amount of added members
+console.log(res);
 client.quit();
 ```
 
