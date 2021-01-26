@@ -2138,7 +2138,7 @@ const query = [
 
 // callback
 client.zrevrange(...query, (e, res) => {
-  console.log(res); // ['Sun', 'Earth', 'Pluto', 'Moon']
+  console.log(res); // ['Moon', 'Pluto', 'Earth', 'Sun']
   client.quit();
 });
 
@@ -2149,7 +2149,7 @@ const zrevrangeAsync = promisify(client.zrevrange).bind(client);
 
 zrevrangeAsync(...query)
   .then(res => {
-     console.log(res); // ['Sun', 'Earth', 'Pluto', 'Moon']
+     console.log(res); // ['Moon', 'Pluto', 'Earth', 'Sun']
    })
   .then(() => client.quit());
   
@@ -2159,7 +2159,7 @@ const bluebird = require('bluebird');
 bluebird.promisifyAll(redis);
 
 const res = await client.zrevrangeAsync(...query);
-console.log(res); // ['Sun', 'Earth', 'Pluto', 'Moon']
+console.log(res); // ['Moon', 'Pluto', 'Earth', 'Sun']
 client.quit();
 ```
 
@@ -2196,7 +2196,7 @@ const query = [
 ];
 
 // callback
-client.zrevrange(...query, (e, res) => {
+client.zrange(...query, (e, res) => {
   console.log(res); // ['Sun', 'Earth', 'Pluto', 'Moon']
   client.quit();
 });
@@ -2204,9 +2204,9 @@ client.zrevrange(...query, (e, res) => {
 
 // promises
 const { promisify } = require('util');
-const zrevrangeAsync = promisify(client.zrevrange).bind(client);
+const zrangeAsync = promisify(client.zrange).bind(client);
 
-zrevrangeAsync(...query)
+zrangeAsync(...query)
   .then(res => {
      console.log(res); // ['Sun', 'Earth', 'Pluto', 'Moon']
    })
@@ -2217,7 +2217,7 @@ zrevrangeAsync(...query)
 const bluebird = require('bluebird');
 bluebird.promisifyAll(redis);
 
-const res = await client.zrevrangeAsync(...query);
+const res = await client.zrangeAsync(...query);
 console.log(res); // ['Sun', 'Earth', 'Pluto', 'Moon']
 client.quit();
 ```
