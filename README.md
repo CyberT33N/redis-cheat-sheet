@@ -198,6 +198,11 @@ The difference to sets is that our members got scores. Those scores get automati
 planets: Earth:1, Pluto:2, Earth:3
 ```
 
+To prevent duplicated data use any unique id inside of your members:
+```javascript
+planets: Earth:day1:1, Pluto:day2:2, Earth:day3:3, Earth:day4:4
+```
+
 <br><br>
 What are the benefits of this way of using sorted sets?
 - It is always sorted
