@@ -1113,7 +1113,11 @@ client.quit();
 
 Syntax:
 ```javascript
-ZADD sortedSetname 2 "value" 3 "value"
+// single inserts
+ZADD sortedSetname score member
+
+// multiple inserts
+ZADD sortedSetname score member score member
 ```
 
 <br><br>
