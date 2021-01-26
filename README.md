@@ -2121,6 +2121,164 @@ client.quit();
 
 
 
+<br><br>
+
+
+## TTL (https://redis.io/commands/ttl)
+- Returns the remaining time to live of a key that has a timeout. This introspection capability allows a Redis client to check how many seconds a given key will continue to be part of the dataset.
+
+
+<br><br>
+
+
+Syntax:
+```javascript
+TTL keyName
+```
+
+```javascript
+/*
+Our key looks like this:
+username: Peter123
+
+And we would set an expire date before:
+EXPIRE username 10
+*/
+
+// callback
+client.ttl('username', (e, res) => {
+  console.log(res); // 10
+  client.quit();
+});
+
+
+// promises
+const { promisify } = require('util');
+const ttl = promisify(client.ttl).bind(client);
+
+ttlAsync('username')
+  .then(res => {
+     console.log(res); // 10
+   })
+  .then(() => client.quit());
+  
+
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const res = await client.ttlAsync('username');
+console.log(res); // 10
+client.quit();
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2359,7 +2517,7 @@ EXPIRE keyName timeoutValue
 ```javascript
 /*
 Our string looks like this:
-username Peter123
+username: Peter123
 */
 
 const query = [
