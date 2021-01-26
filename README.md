@@ -190,12 +190,8 @@ keyPrefix(optional) - collectionName(optional) - keyName:string/list/set/hash
 
 ## Sorted Sets (ZSET)
 - https://www.youtube.com/watch?v=pk2TAc89bwE
-- First we make sure to choose an unique prefix and metric and maybe aswell a timestamp for our syntax:
-```javascript
-prefix:metric:date:id
-```
 
-<br><br>
+<br>
 
 The difference to sets is that our members got scores. Those scores get automatically sortedin ascending order:
 ```javascript
