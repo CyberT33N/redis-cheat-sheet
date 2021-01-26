@@ -2677,6 +2677,66 @@ client.quit();
 
 
 
+<br><br>
+
+
+## ZSCORE (https://redis.io/commands/zscore)
+- Returns the score of member in the sorted set at key. If member does not exist in the sorted set, or key does not exist, nil is returned.
+
+<br>
+
+Syntax:
+```javascript
+ZSCORE sortedSetName member
+```
+
+```javascript
+/*
+Our sorted set looks like this:
+planets: Sun:1, Earth:2, Pluto:3, Moon:4
+*/
+
+const query = [
+  'planets',
+  'Earth'
+];
+
+
+// callback
+client.zscore(...query, (e, res) => {
+  console.log(res); // 2
+  client.quit();
+});
+
+
+// promises
+const { promisify } = require('util');
+const zscoreAsync = promisify(client.zscore).bind(client);
+
+zscoreAsync(...query)
+  .then(res => {
+     console.log(res); // 2
+   })
+  .then(() => client.quit());
+  
+
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const res = await client.zscoreAsync(...query);
+console.log(res); // 2
+client.quit();
+```
+
+
+
+
+
+
+
+
+
 
 
 <br><br>
