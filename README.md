@@ -3748,6 +3748,249 @@ client.quit();
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<br><br>
+__________________________________________________
+__________________________________________________
+<br><br>
+
+# Streams
+
+
+
+
+<br><br>
+
+## XADD (https://redis.io/commands/xadd)
+- Appends the specified stream entry to the stream at the specified key. If the key does not exist, as a side effect of running this command the key is created with a stream value. The creation of stream's key can be disabled with the NOMKSTREAM option.
+
+
+Syntax:
+```javascript
+XADD keyName ID field value
+```
+
+
+```javascript
+const query = [
+  'planets',
+  '*',
+  'name',
+  'Sara',
+  'surname',
+  'OConnor',
+];
+
+const query2 = [
+  'planets',
+  '*',
+  'field1',
+  'value1',
+  'field2',
+  'value2',
+  'field3',
+  'value3',
+];
+
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const res = await client.xaddAsync(...query);
+console.log(res); // 1611735223344-0 <-- stream look like this [["1611735223344-0"]["name", "Sara", "surname", "OConnor"]]
+
+const res2 = await client.xaddAsync(...query);
+console.log(res2); // 1611735223344-1 <-- stream look like this [["1611735223344-1"]["field1, "value1", "field2, "value2", "field3, "value3"]]
+
+client.quit();
+```
+
+
+
+
+
+
+
+
+
+<br><br>
+
+## XLEN (https://redis.io/commands/xlen)
+- Returns the number of entries inside a stream. If the specified key does not exist the command returns zero, as if the stream was empty. However note that unlike other Redis types, zero-length streams are possible, so you should call TYPE or EXISTS in order to check if a key exists or not. Streams are not auto-deleted once they have no entries inside (for instance after an XDEL call), because the stream may have consumer groups associated with it.
+
+
+Syntax:
+```javascript
+XLEN streamName
+```
+
+
+```javascript
+/*
+redis> XADD mystream * item 1
+"1611736021464-0"
+redis> XADD mystream * item 2
+"1611736021464-1"
+redis> XADD mystream * item 3
+"1611736021464-2"
+*/
+
+const query = [
+  'mystream',
+];
+
+// callback
+client.xlen(...query, (e, res) => {
+  console.log(res) // 3 <-- Returns the number of entries inside a stream
+  client.quit();
+});
+
+
+// promises
+const { promisify } = require('util');
+const xlenAsync = promisify(client.xlen).bind(client);
+
+xlenAsync(...query)
+  .then(res => console.log(res)) // 3 <-- Returns the number of entries inside a stream
+  .then(() => client.quit());
+  
+
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const res = await client.xlenAsync(...query);
+console.log(res); // 3 <-- Returns the number of entries inside a stream
+client.quit();
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <br><br>
 __________________________________________________
 __________________________________________________
