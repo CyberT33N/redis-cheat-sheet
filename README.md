@@ -281,10 +281,41 @@ __________________________________________________
 __________________________________________________
 <br><br>
 
+# Helper Tools
 
+<br><br>
 
+## Object2Array
+```javascript
+/**
+ * Takes an object and returns an array whose elements are alternating
+ * keys and values from that object.  Example:
+ *
+ * { hello: 'world', shoeSize: 13 } -> [ 'hello', 'world', 'shoeSize', 13 ]
+ *
+ * Used as a helper function for XADD.
+ *
+ * @param {Object} obj - object to be converted to an array.
+ * @returns {Array} - array containing alternating keys and values from 'obj'.
+ * @private
+ */
+const objectToArray = (obj) => {
+  const arr = [];
 
-# Key Generator Script
+  for (const k in obj) {
+    if (obj.hasOwnProperty(k)) {
+      arr.push(k);
+      arr.push(obj[k]);
+    }
+  }
+
+  return arr;
+};
+```
+
+<br><br>
+
+## Key Generator Script
 ```javascript
 const config = require('better-config');
 const shortId = require('shortid');
