@@ -3513,6 +3513,85 @@ client.quit();
 
 
 
+<br><br>
+
+
+
+
+## ZREMRANGEBYSCORE (https://redis.io/commands/zremrangebyscore)
+- Removes all elements in the sorted set stored at key with a score between min and max (inclusive). Since version 2.1.6, min and max can be exclusive, following the syntax of ZRANGEBYSCORE.
+
+<br>
+
+Syntax:
+```javascript
+ZREMRANGEBYSCORE keyName min max
+```
+
+<br>
+
+```javascript
+/*
+Our sorted set looks like this:
+planets: Mars:1, Pluto:2, Sun:3, Earth:4
+*/
+
+const query = [
+  'planets',
+  '-inf',
+  '(2',
+];
+
+// callback
+client.zremrangebyscore(...query, (e, res) => {
+  console.log(res) // 1 (amount of member removed) <-- In our planets set it will look like this: Pluto:2, Sun:3, Earth:4
+  client.quit();
+});
+
+
+// promises
+const { promisify } = require('util');
+const zremrangebyscoreAsync = promisify(client.zremrangebyscore).bind(client);
+
+zremrangebyscoreAsync(...query)
+  .then(res => console.log(res)) // 1 (amount of member removed) <-- In our planets set it will look like this: Pluto:2, Sun:3, Earth:4
+  .then(() => client.quit());
+  
+
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const res = await client.zremrangebyscore(...query);
+console.log(res); // 1 (amount of member removed) <-- In our planets set it will look like this: Pluto:2, Sun:3, Earth:4
+client.quit();
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 <br><br>
