@@ -1587,10 +1587,10 @@ ZINTERSTORE destinationSortedSetName amountOfSortedSetsWeCompare sortedSetA sort
 ```javascript
 /*
 Sorted Set A:
-planetsRed: Sun:1, Neptun:2, Mars:3
+planetsRed: one:1, two:2
 
 Sorted Set B:
-planetsBlue: Earth:1, Moon:2
+planetsBlue: one:1, two:2, three:3
 */
 
 const query = [
@@ -1605,7 +1605,7 @@ const query = [
 
 // callback
 client.geoadd(...query, (e, res) => {
-  console.log(res);
+  console.log(res); // 2 <-- because 2 matches was found. The result in out set will be: one:5, two:10
   client.quit();
 });
 
@@ -1616,7 +1616,7 @@ const geoaddAsync = promisify(client.geoadd).bind(client);
 
 geoaddAsync(...query)
   .then(res => {
-    console.log(res);
+    console.log(res); // 2 <-- because 2 matches was found. The result in out set will be: one:5, two:10
   }) // OK
   .then(() => client.quit());
   
@@ -1626,7 +1626,7 @@ const bluebird = require('bluebird');
 bluebird.promisifyAll(redis);
 
 const res = await client.geoaddAsync(...query);
-console.log(res);
+console.log(res); // 2 <-- because 2 matches was found. The result in out set will be: one:5, two:10
 client.quit();
 ```
 
