@@ -3815,7 +3815,16 @@ __________________________________________________
 
 Syntax:
 ```javascript
-XADD keyName ID field value
+XADD streamName ID field value
+
+// multiple fields
+XADD streamName ID field value field2 value2
+
+// let redis generate ID
+XADD streanName * field value
+
+// llimit stream to 1000 entries
+XADD streanName MAXLEN ~ 1000 * field value
 ```
 
 
@@ -3844,10 +3853,10 @@ const bluebird = require('bluebird');
 bluebird.promisifyAll(redis);
 
 const res = await client.xaddAsync(...query);
-console.log(res); // 1611735223344-0 <-- stream look like this [["1611735223344-0"]["name", "Sara", "surname", "OConnor"]]
+console.log(res); // 1611735223344-0 <-- returns stream ID and stream look like this [["1611735223344-0"]["name", "Sara", "surname", "OConnor"]]
 
 const res2 = await client.xaddAsync(...query);
-console.log(res2); // 1611735223344-1 <-- stream look like this [["1611735223344-1"]["field1, "value1", "field2, "value2", "field3, "value3"]]
+console.log(res2); // 1611735223344-1 <-- returns stream ID and stream look like this [["1611735223344-1"]["field1, "value1", "field2, "value2", "field3, "value3"]]
 
 client.quit();
 ```
@@ -3934,6 +3943,12 @@ client.quit();
 Syntax:
 ```javascript
 XRANGE streamName startCount endCount
+
+// limit result of entries.In this case 1
+XRANGE streamName 1526985054069-0 + COUNT 1
+
+// Iterating a stream
+XRANGE streamName - + COUNT 2
 ```
 
 
@@ -3986,6 +4001,9 @@ client.quit();
 Syntax:
 ```javascript
 XREVRANGE streamName startCount endCount
+
+// get last element of stream
+XREVRANGE streamName + - COUNT 1
 ```
 
 
