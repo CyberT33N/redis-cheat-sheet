@@ -3925,6 +3925,64 @@ client.quit();
 
 
 
+<br><br>
+
+## XRANGE (https://redis.io/commands/xrange)
+- The command returns the stream entries matching a given range of IDs. The range is specified by a minimum and maximum ID. All the entries having an ID between the two specified or exactly one of the two IDs specified (closed interval) are returned.
+
+
+Syntax:
+```javascript
+XRANGE streamName startCount endCount
+```
+
+
+```javascript
+const query = [
+  'mystream',
+  '+',
+  '-',
+];
+
+// callback
+client.xrange(...query, (e, res) => {
+  console.log(res) // returns array with the streaming data
+  client.quit();
+});
+
+
+// promises
+const { promisify } = require('util');
+const xrangeAsync = promisify(client.xrange).bind(client);
+
+xrangeAsync(...query)
+  .then(res => console.log(res)) // returns array with the streaming data
+  .then(() => client.quit());
+  
+
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const res = await client.xrangeAsync(...query);
+console.log(res); // returns array with the streaming data
+client.quit();
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
