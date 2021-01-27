@@ -1673,6 +1673,82 @@ client.quit();
 
 
 
+<br><br>
+
+
+
+
+
+## ZUNIONSTORE (https://redis.io/commands/zunionstore)
+- Computes the union of numkeys sorted sets given by the specified keys, and stores the result in destination. It is mandatory to provide the number of input keys (numkeys) before passing the input keys and the other (optional) arguments. By default, the resulting score of an element is the sum of its scores in the sorted sets where it exists.
+- Using the WEIGHTS option, it is possible to specify a multiplication factor for each input sorted set. This means that the score of every element in every input sorted set is multiplied by this factor before being passed to the aggregation function. When WEIGHTS is not given, the multiplication factors default to 1.
+
+
+<br><br>
+
+Syntax:
+```javascript
+ZINTERSTORE destinationSortedSetName amountOfSortedSetsWeCompare sortedSetA sortedSetB WEIGHTS weightSortedSetA weightSortedSetB
+```
+
+```javascript
+/*
+Sorted Set A:
+planetsRed: one:1, two:2
+
+Sorted Set B:
+planetsBlue: one:1, two:2, three:3
+*/
+
+const query = [
+  'out',
+  2,
+  'planetsRed',
+  'planetsBlue',
+  'WEIGHTS',
+  2,
+  3,
+];
+
+// callback
+client.geoadd(...query, (e, res) => {
+  console.log(res); // 2 <-- because 2 matches was found. The result in out set will be: one:5, two:10
+  client.quit();
+});
+
+
+// promise
+const { promisify } = require('util');
+const geoaddAsync = promisify(client.geoadd).bind(client);
+
+geoaddAsync(...query)
+  .then(res => {
+    console.log(res); // 2 <-- because 2 matches was found. The result in out set will be: one:5, two:10
+  }) // OK
+  .then(() => client.quit());
+  
+  
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const res = await client.geoaddAsync(...query);
+console.log(res); // 2 <-- because 2 matches was found. The result in out set will be: one:5, two:10
+client.quit();
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
