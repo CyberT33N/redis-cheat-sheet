@@ -3929,7 +3929,7 @@ client.quit();
 
 ## XRANGE (https://redis.io/commands/xrange)
 - The command returns the stream entries matching a given range of IDs. The range is specified by a minimum and maximum ID. All the entries having an ID between the two specified or exactly one of the two IDs specified (closed interval) are returned.
-
+- **Compared to XREVRANGE it reads entries from oldest to newest**
 
 Syntax:
 ```javascript
@@ -3981,7 +3981,7 @@ client.quit();
 
 ## XREVRANGE (https://redis.io/commands/xrevrange)
 - This command is exactly like XRANGE, but with the notable difference of returning the entries in reverse order, and also taking the start-end range in reverse order: in XREVRANGE you need to state the end ID and later the start ID, and the command will produce all the element between (or exactly like) the two IDs, starting from the end side.
-
+- **Compared to XRANGE it reads entries from newest to oldest**
 
 Syntax:
 ```javascript
