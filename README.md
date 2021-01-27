@@ -3977,6 +3977,52 @@ client.quit();
 
 
 
+<br><br>
+
+## XREVRANGE (https://redis.io/commands/xrevrange)
+- This command is exactly like XRANGE, but with the notable difference of returning the entries in reverse order, and also taking the start-end range in reverse order: in XREVRANGE you need to state the end ID and later the start ID, and the command will produce all the element between (or exactly like) the two IDs, starting from the end side.
+
+
+Syntax:
+```javascript
+XREVRANGE streamName startCount endCount
+```
+
+
+```javascript
+const query = [
+  'mystream',
+  '+',
+  '-',
+];
+
+// callback
+client.xrevrange(...query, (e, res) => {
+  console.log(res) // returns array with the streaming data
+  client.quit();
+});
+
+
+// promises
+const { promisify } = require('util');
+const xrevrangeAsync = promisify(client.xrevrange).bind(client);
+
+xrevrangeAsync(...query)
+  .then(res => console.log(res)) // returns array with the streaming data
+  .then(() => client.quit());
+  
+
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const res = await client.xrevrangeAsync(...query);
+console.log(res); // returns array with the streaming data
+client.quit();
+```
+
+
+
 
 
 
