@@ -3526,6 +3526,9 @@ client.quit();
 Syntax:
 ```javascript
 ZREMRANGEBYSCORE keyName min max
+
+// get top 100 with the highest score
+ZREMRANGEBYSCORE keyName 0 -101
 ```
 
 <br>
