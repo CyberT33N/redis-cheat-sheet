@@ -1270,6 +1270,116 @@ client.quit();
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<br><br>
+
+
+
+
+# INCR (https://redis.io/commands/incr)
+- Increments the number stored at key by one. If the key does not exist, it is set to 0 before performing the operation. An error is returned if the key contains a value of the wrong type or contains a string that can not be represented as integer. This operation is limited to 64 bit signed integers.
+
+
+<br><br>
+
+Syntax:
+```javascript
+INCR keyName
+```
+
+
+```javascript
+/*
+Our string looks like this:
+temperature: 22
+*/
+
+
+const query = [
+  'temperature',
+  1,
+];
+
+// callback
+client.incr(...query, (e, res) => {
+   console.log(typeof res); // string
+   console.log(res); // 23
+   client.quit();
+});
+
+
+// promises
+const { promisify } = require('util');
+const incrAsync = promisify(client.incr).bind(client);
+
+incrAsync(...query)
+  .then(res => {
+    console.log(typeof res); // string
+    console.log(res); // 23
+   })
+  .then(() => client.quit());
+  
+
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const res = await client.incrAsync(...query);
+console.log(typeof res); // string
+console.log(res); // 23
+client.quit();
+```
+
+
+
 <br><br>
 
 
@@ -1299,9 +1409,9 @@ client.incrbyfloat(...query, (e, res) => {
 
 // promises
 const { promisify } = require('util');
-const getIncrbyfloat = promisify(client.incrbyfloat).bind(client);
+const getIncrbyfloatAsync = promisify(client.incrbyfloat).bind(client);
 
-getIncrbyfloat(...query)
+getIncrbyfloatAsync(...query)
   .then(res => {
     console.log(typeof res); // string
     console.log(res); // 23.5
