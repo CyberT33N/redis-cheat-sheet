@@ -793,17 +793,33 @@ try {
 
 
 ## Event Listener
+- connect (Connected to Redis)
+```javascript
+client.on('connect', () => console.log('Successfully connected to Redis'));
+```
+<br>
+
 - ready (Connections was successfully)
 ```javascript
 client.on('ready', () => console.log('Connection successfully'));
 ```
+<br>
+
+- error (Error while any process)
+```javascript
+client.on('error', (e) => console.log('Error catched at client.. error: ' + e));
+```
+<br>
+
 - end (Connection has been closed)
 ```javascript
 client.on('end', () => console.log('Connection was closed'));
 ```
+<br>
+
 - reconnecting (Connection was lost and reconnect was tried)
 ```javascript
-client.on('end', (o) => {
+client.on('reconnecting', (o) => {
   console.log(`Connection was lost.. try reconnect..
   Attempt number: ${o.attempt}
   Time in MS since last attempt: ${o.delay}
