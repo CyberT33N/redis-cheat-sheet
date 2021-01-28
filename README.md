@@ -898,6 +898,14 @@ bluebird.promisifyAll(redis);
 const reply = await client.setAsync('hello', 'world');
 console.log(reply); // OK
 client.quit();
+
+
+// Simulate error handling. Wrong number of arguments for command.
+try {
+  await client.setAsync(key);
+} catch (e) {
+  console.log(e);
+}
 ```
 
 
@@ -1464,6 +1472,14 @@ const res = await client.incrAsync(...query);
 console.log(typeof res); // string
 console.log(res); // 23
 client.quit();
+
+
+// Simulate error handling. Incrementing a key that holds a string value.
+try {
+  await client.incrAsync(key);
+} catch (e) {
+  console.log(e);
+}
 ```
 
 
@@ -4700,6 +4716,28 @@ expect(responses).toHaveLength(3);
 expect(responses[0]).toBe(1);
 expect(responses[1]).toBe(1);
 expect(responses[2]).toBe(1);
+
+
+
+// Simulate error handling. Bad command as part of a pipeline.
+try {
+  const pipeline = client.batch();
+  // This command will succeed.
+  pipeline.set(key, 'test');
+
+  // This command will fail.
+  pipeline.incr(key);
+
+  // This command will succeed.
+  pipeline.get(key);
+
+  const results = await pipeline.execAsync();
+
+  console.log('Results:' + results);
+ } catch (e) {
+  // The error will not appear here.
+  console.log('Caught pipeline error:' + e);
+ }
 ```
 
 
