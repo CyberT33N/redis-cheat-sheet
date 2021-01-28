@@ -1081,6 +1081,15 @@ await Promise.all(
 
 
 
+
+
+
+
+
+
+
+
+
 ## HMSET (https://redis.io/commands/hmset)
 - Sets the specified fields to their respective values in the hash stored at key. This command overwrites any specified fields already existing in the hash. If key does not exist, a new key holding a hash is created.
 - Instead to HSET you can directly insert an Object. This is way more usefully than manually iterate over each object key at HSET.
@@ -1152,9 +1161,54 @@ client.quit();
 
 
 
+<br><br>
 
 
 
+
+
+## LPUSH (https://redis.io/commands/lpush)
+- Insert all the specified values at the head of the list stored at key. If key does not exist, it is created as empty list before performing the push operations. When key holds a value that is not a list, an error is returned.
+
+<br><br>
+
+Syntax:
+```javascript
+LPUSH listKeyName value
+```
+
+<br><br>
+
+```javascript
+const query = [
+  'github',
+  'https://github.com/'
+];
+
+// callback
+client.lpush(...query, (e, res) => {
+  console.log(res); // 1 <-- amount of pushed members
+  client.quit();
+});
+
+
+// promise
+const { promisify } = require('util');
+const lpushAsync = promisify(client.lpush).bind(client);
+
+lpushAsync(...query)
+  .then(res => console.log(res)) // 1 <-- amount of pushed members
+  .then(() => client.quit());
+  
+  
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const res = await client.lpushAsync(...query);
+console.log(res); // 1 <-- amount of pushed members
+client.quit();
+```
 
 
 
