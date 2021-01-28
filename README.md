@@ -4672,3 +4672,80 @@ __________________________________________________
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<br><br>
+__________________________________________________
+__________________________________________________
+<br><br>
+
+
+# node-redis (https://redis.js.org/#-extras-redisadd_commandcommand_name)
+- Node.js Client
+
+<br><br>
+
+## addCommand
+- Use commands of other redis modules
+
+<br><br>
+
+
+```javascript
+const redis = require('redis');
+
+// example for adding RedisTimeSeries Commands
+redis.addCommand('ts.add'); // redis.ts_addAsync
+redis.addCommand('ts.range'); // redis.ts_rangeAsync
+```
+
+
+
+
+
