@@ -3583,8 +3583,11 @@ client.quit();
 ```
 
 
-<br><br>
 
+
+
+
+<br><br>
 
 
 
@@ -3623,6 +3626,72 @@ client.quit();
 
 
 <br><br>
+
+
+
+
+
+
+<br><br>
+
+
+
+## BRPOP (https://redis.io/commands/brpop)
+- BRPOP is a blocking list pop primitive. It is the blocking version of RPOP because it blocks the connection when there are no elements to pop from any of the given lists. An element is popped from the tail of the first list that is non-empty, with the given keys being checked in the order that they are given.
+
+<br><br>
+
+
+```javascript
+/*
+Our list looks like this:
+planets: Mars, Pluto, Sun, Earth
+*/
+
+// callback
+client.brpop('planets', (e, res) => {
+  console.log(res)  // Earth <-- ['Mars', 'Pluto', 'Sun']
+  client.quit();
+});
+
+
+// promises
+const { promisify } = require('util');
+const brpopAsync = promisify(client.brpop).bind(client);
+
+brpopAsync('planets')
+  .then(res => console.log(res)) // Earth <-- ['Mars', 'Pluto', 'Sun']
+  .then(() => client.quit());
+  
+
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const res = await client.brpopAsync('planets');
+console.log(res);  // Earth <-- ['Mars', 'Pluto', 'Sun']
+client.quit();
+```
+
+
+<br><br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
