@@ -1142,12 +1142,97 @@ await Promise.all(
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 <br><br>
 
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## MSET (https://redis.io/commands/mset)
+- Sets the given keys to their respective values. MSET replaces existing values with new values, just as regular SET. See MSETNX if you don't want to overwrite existing values.
+
+<br><br>
+
+Syntax:
+```javascript
+MSET stringKeyName value
+
+// multiple imports
+MSET stringKeyName1 value1 stringKeyName2 value2
+```
+
+<br><br>
+
+```javascript
+const query = [
+  'github',
+  'https://github.com',
+];
+
+// callback
+client.mset(...query, (e, res) => {
+  console.log(res); // OK
+  client.quit();
+});
+
+
+// promise
+const { promisify } = require('util');
+const msetAsync = promisify(client.mset).bind(client);
+
+msetAsync(...query)
+  .then(res => console.log(res)) // OK
+  .then(() => client.quit());
+  
+  
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const res = await client.msetAsync(...query);
+console.log(res); // OK
+client.quit();
+```
+
+
+
+
+
+
+
+
+<br><br>
 
 
 
