@@ -36,6 +36,28 @@ _________________________________________
 sudo docker run --name my-first-redis -p 6379:6379 redis
 ```
 
+## OS (https://redis.io/download)
+
+#### Linux
+```bash
+wget https://download.redis.io/releases/redis-6.0.10.tar.gz
+tar xzf redis-6.0.10.tar.gz
+cd redis-6.0.10
+make
+
+# The binaries that are now compiled are available in the src directory. Run Redis with:
+src/redis-server
+
+# You can interact with Redis using the built-in client:
+src/redis-cli
+redis> set foo bar
+OK
+redis> get foo
+"bar"
+```
+
+
+
 <br><br>
 
 ## GUI
@@ -52,9 +74,11 @@ sudo docker run --name my-first-redis -p 6379:6379 redis
 
 <br><br>
 
-#### RedisTimeSeries
-- https://oss.redislabs.com/redistimeseries/#setup
-
+#### RedisTimeSeries (https://oss.redislabs.com/redistimeseries/#setup)
+- https://s3.amazonaws.com/redismodules/redistimeseries/redistimeseries.Linux-x86_64.1.4.7.zip
+```bash
+./redis-server --loadmodule ~/Downloads/redistimeseries.so
+```
 
 
 
