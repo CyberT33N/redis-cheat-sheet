@@ -3655,6 +3655,9 @@ client.quit();
 Syntax:
 ```javascript
 BRPOP listKeyName timeout
+
+// wait infinity
+BRPOP listKeyName 0
 ```
 
 
