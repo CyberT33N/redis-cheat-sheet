@@ -44,6 +44,12 @@ sudo docker run --name my-first-redis -p 6379:6379 redis
 - https://github.com/qishibo/AnotherRedisDesktopManager
 
 
+<br><br>
+
+
+## Enterprise Software
+- https://redislabs.com/redis-enterprise-software/download-center/modules/
+
 
 
 
