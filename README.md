@@ -2465,6 +2465,38 @@ client.quit();
 
 
 
+<br><br> 
+
+
+## SCAN (https://redis.io/commands/scan)
+- The SCAN command and the closely related commands SSCAN, HSCAN and ZSCAN are used in order to incrementally iterate over a collection of elements.
+<br> SCAN iterates the set of keys in the currently selected Redis database.
+<br> SSCAN iterates elements of Sets types.
+<br> HSCAN iterates fields of Hash types and their associated values.
+<br> ZSCAN iterates elements of Sorted Set types and their associated scores.
+
+<br>
+
+Syntax:
+```javascript
+SCAN cursor [MATCH pattern] [COUNT count] [TYPE type]
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
