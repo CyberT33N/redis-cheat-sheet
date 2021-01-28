@@ -50,6 +50,10 @@ sudo docker run --name my-first-redis -p 6379:6379 redis
 ## Enterprise Software
 - https://redislabs.com/redis-enterprise-software/download-center/modules/
 
+<br><br>
+
+#### RedisTimeSeries
+- https://oss.redislabs.com/redistimeseries/#setup
 
 
 
