@@ -760,6 +760,26 @@ const connectWithSSL = () => {
   client.ping((err, response) => console.log(response));
   client.quit();
 };
+
+
+const connectWithRetry = () => {
+  const client = redis.createClient({
+    host: '127.0.0.1',
+    port: 6379,
+    retry_strategy: (options) => {
+        if (options.attempt > 5) {
+          return new Error('Retry attempts exhausted.');
+        }
+
+        // Try again after a period of time...
+        return (options.attempt * 1000);
+      },
+  });
+
+  // Send PING command expect PONG response.
+  client.ping((err, response) => console.log(response));
+  client.quit();
+};
 ```
 
 
