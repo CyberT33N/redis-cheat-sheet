@@ -4696,6 +4696,7 @@ __________________________________________________
 # Pipeline
 - https://www.youtube.com/watch?v=sXCov8qlRv8
 - Instead of sending single requests each time we can use a pipeline to stack our operations inside of one single request!
+- **When any pipeline operations fail you can not catch the error with try/catch! The error will be inserted to the result array. Also all following pipelines will be executed even when the current operation fails.**
 <br><br>
 
 ## EXEC (https://redis.io/commands/exec)
@@ -4745,7 +4746,7 @@ try {
 <br><br>
 
 # Transaction (https://www.youtube.com/watch?v=_XMYREa5vjg)
-
+- **When any transaction operations fail you can not catch the error with try/catch! The error will be inserted to the result array. Also all following transactions will be executed even when the current operation fails.**
 <br><br>
 
 
