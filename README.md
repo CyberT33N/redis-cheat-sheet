@@ -762,11 +762,13 @@ const connectWithSSL = () => {
 };
 
 
-const connectWithRetry = () => {
-  const client = redis.createClient({
-    host: '127.0.0.1',
-    port: 6379,
-    retry_strategy: (options) => {
+const connectionErrorExample = async () => {
+  try {
+    const client = redis.createClient({
+      port: 6379,
+      host: '127.0.0.1',
+      // password: 'password',
+      retry_strategy: (options) => {
         if (options.attempt > 5) {
           return new Error('Retry attempts exhausted.');
         }
@@ -774,11 +776,30 @@ const connectWithRetry = () => {
         // Try again after a period of time...
         return (options.attempt * 1000);
       },
-  });
+    });
 
-  // Send PING command expect PONG response.
-  client.ping((err, response) => console.log(response));
-  client.quit();
+    client.on('connect', () => {
+      console.log('Connected to Redis.');
+    });
+
+    client.on('reconnecting', (o) => {
+      console.log('Attempting to reconnect to Redis:');
+      console.log(o);
+    });
+
+    client.on('error', (e) => {
+      console.log('Caught error in handler:');
+      console.log(e);
+    });
+
+    const key = 'connectionTest';
+
+    const response = await client.setAsync(key, 'hello');
+    console.log(`SET response: ${response}`);
+  } catch (err) {
+    console.log('Caught an error:');
+    console.log(err);
+  }
 };
 ```
 
