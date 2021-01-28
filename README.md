@@ -2270,6 +2270,63 @@ client.quit();
 
 
 
+<br><br>
+
+
+## KEYS (https://redis.io/commands/keys)
+- **NEVER use KEYS on extremly big databases to prevent performance issues!**
+
+<br>
+
+Syntax:
+```javascript
+// using wildmarks
+KEYS *name*
+
+/*
+Supported glob-style patterns:
+h?llo matches hello, hallo and hxllo
+h*llo matches hllo and heeeello
+h[ae]llo matches hello and hallo, but not hillo
+h[^e]llo matches hallo, hbllo, ... but not hello
+h[a-b]llo matches hallo and hbllo
+
+Use \ to escape special characters if you want to match them verbatim.
+*/
+```
+
+```javascript
+/*
+We got keys lke this:
+firstname: Peter
+lastname: Doe
+*/
+
+// callback
+client.keys('*name*', (e, res) => {
+  console.log(res); // ['firstname', 'lastname']
+  client.quit();
+});
+
+
+// promises
+const { promisify } = require('util');
+const keysAsync = promisify(client.keys).bind(client);
+
+keysAsync('hello')
+  .then(res => console.log(res)) // ['firstname', 'lastname']
+  .then(() => client.quit());
+  
+
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const res = await client.keysAsync('hello');
+console.log(res); // ['firstname', 'lastname']
+client.quit();
+```
+
 
 
 
