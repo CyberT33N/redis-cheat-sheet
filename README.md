@@ -2079,6 +2079,7 @@ client.quit();
 ## ZINTERSTORE (https://redis.io/commands/zinterstore)
 - Computes the intersection of numkeys sorted sets given by the specified keys, and stores the result in destination. It is mandatory to provide the number of input keys (numkeys) before passing the input keys and the other (optional) arguments.
 - Using the WEIGHTS option, it is possible to specify a multiplication factor for each input sorted set. This means that the score of every element in every input sorted set is multiplied by this factor before being passed to the aggregation function. When WEIGHTS is not given, the multiplication factors default to 1.
+- In easy words when using WEIGHTS it will multiply the 2 values which have been set and then add this number to the score.
 
 
 
