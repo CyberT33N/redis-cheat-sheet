@@ -2893,6 +2893,69 @@ client.quit();
 
 
 
+<br><br>
+
+
+## ZCARD (https://redis.io/commands/zcard)
+- Returns the sorted set cardinality (number of elements) of the sorted set stored at key.
+
+
+<br>
+
+Syntax:
+```javascript
+ZCARD sortedSetName
+```
+
+```javascript
+/*
+Our sorted set looks like this:
+planets: Sun:1, Earth:2, Pluto:3, Moon:4
+*/
+
+const query = [
+  'planets',
+];
+
+// callback
+client.zcard(...query, (e, res) => {
+  console.log(res); // 4 <-- Returns the sorted set cardinality (number of elements) of the sorted set stored at key.
+  client.quit();
+});
+
+
+// promises
+const { promisify } = require('util');
+const zcardAsync = promisify(client.zcard).bind(client);
+
+zcardAsync(...query)
+  .then(res => {
+     console.log(res); // 4 <-- Returns the sorted set cardinality (number of elements) of the sorted set stored at key.
+   })
+  .then(() => client.quit());
+  
+
+// await
+const bluebird = require('bluebird');
+bluebird.promisifyAll(redis);
+
+const res = await client.zcardAsync(...query);
+console.log(res); // 4 <-- Returns the sorted set cardinality (number of elements) of the sorted set stored at key.
+client.quit();
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
