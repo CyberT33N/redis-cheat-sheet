@@ -3652,6 +3652,12 @@ client.quit();
 <br><br>
 
 
+Syntax:
+```javascript
+BRPOP listKeyName timeout
+```
+
+
 ```javascript
 /*
 Our list looks like this:
