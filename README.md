@@ -4563,3 +4563,78 @@ expect(responses[2]).toBe(1);
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<br><br>
+__________________________________________________
+__________________________________________________
+<br><br>
+
+
+# Rate Limits
+- In order to limit user requests on your database you can create rate limits. 
+<br><br>
+
+## Guides
+- https://www.youtube.com/watch?v=let90x9uR_g
+
+<br><br>
+
+
+
+
