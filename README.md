@@ -62,6 +62,10 @@ redis> get foo
 
 ## GUI
 - https://redislabs.com/redis-enterprise/redis-insight/
+  - http://localhost:8001/
+
+<br><br>
+
 - https://github.com/uglide/RedisDesktopManager
 - https://github.com/qishibo/AnotherRedisDesktopManager
 
