@@ -62,6 +62,15 @@ redis> get foo
 
 ## GUI
 - https://redislabs.com/redis-enterprise/redis-insight/
+  ```bash
+  sudo chmod +x /home/userNameHere/Documents/RedisInsight-v2-linux-x86_64.AppImage 
+  /home/userNameHere/Documents/RedisInsight-v2-linux-x86_64.AppImage 
+
+  Username: Not Existing
+  Password: Not Existing
+  Host: localhost
+  Port: 6379
+  ```
   - http://localhost:8001/
 
 <br><br>
