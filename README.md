@@ -5411,6 +5411,7 @@ __________________________________________________
 <br><br>
 
 ## docker-compose
+- Username and Password is empty
 ```yaml
 version: '2'
 
@@ -5434,9 +5435,73 @@ services:
     networks:
       - app-tier
 ```
-
-
+  
+```shell
+  docker-compose up -d
+```
+  
+  
+  
+  
+  
+  
 <br><br>
+  
+## Using Master-Slave setups
+- Username is empty and password is str0ng_passw0rd
+```yaml
+version: '2'
+
+networks:
+  app-tier:
+    driver: bridge
+
+services:
+  redis:
+    image: 'bitnami/redis:latest'
+    environment:
+      - REDIS_REPLICATION_MODE=master
+      - REDIS_PASSWORD=str0ng_passw0rd
+    networks:
+      - app-tier
+    ports:
+      - '6379'
+  redis-slave:
+    image: 'bitnami/redis:latest'
+    environment:
+      - REDIS_REPLICATION_MODE=slave
+      - REDIS_MASTER_HOST=redis
+      - REDIS_MASTER_PASSWORD=str0ng_passw0rd
+      - REDIS_PASSWORD=str0ng_passw0rd
+    ports:
+      - '6379'
+    depends_on:
+      - redis
+    networks:
+      - app-tier
+  redis-sentinel:
+    image: 'bitnami/redis-sentinel:latest'
+    environment:
+      - REDIS_MASTER_PASSWORD=str0ng_passw0rd
+    depends_on:
+      - redis
+      - redis-slave
+    ports:
+      - '26379-26381:26379'
+    networks:
+      - app-tier
+```
+  
+```shell
+docker-compose up --scale redis-sentinel=3 -d
+```
+  
+  
+  
+  
+  
+  
+<br><br><br><br>
 
 ## app.js
 ```javascript
