@@ -5374,3 +5374,86 @@ __________________________________________________
 - redis module
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<br><br>
+__________________________________________________
+__________________________________________________
+<br><br>
+
+# Redis Sentinel
+- https://hub.docker.com/r/bitnami/redis-sentinel/
+
+<br><br>
+
+## docker-compose
+```yaml
+version: '2'
+
+networks:
+  app-tier:
+    driver: bridge
+
+services:
+  redis:
+    image: 'bitnami/redis:latest'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    networks:
+      - app-tier
+  redis-sentinel:
+    image: 'bitnami/redis-sentinel:latest'
+    environment:
+      - REDIS_MASTER_HOST=redis
+    ports:
+      - '26379:26379'
+    networks:
+      - app-tier
+```
+
+
+<br><br>
+
+## app.js
+```javascript
+const Redis = require('ioredis');
+
+const redis = new Redis({
+  sentinels: [{ host: 'localhost', port: 26379 }],
+  name: 'mymaster'
+});
+
+redis.set("foo", "bar");
+
+// redis.on('connect', () => {
+//   console.log('Connected to Redis Sentinel');
+// });
+
+// redis.on('error', err => {
+//   console.error('Error connecting to Redis Sentinel', err);
+// });
+```
